@@ -1,0 +1,17 @@
+{
+  "name": "video-chat",
+  "version": "1.0.0",
+  "description": "Video Chat app to learn WebRTC",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "webrtc",
+    "socket",
+    "websocket",
+    "express"
+  ],
+  "author": "Eugeny Dementev",
+  "license": "ISC"
+}
