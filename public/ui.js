@@ -21,3 +21,13 @@ export function registerCopyCodeButtonHandler() {
     navigator.clipboard && navigator.clipboard.writeText(code);
   });
 }
+
+const personalCodeChatButton = document.getElementById('personal_code_chat_button');
+export function registerPersonalChatButtonHandler(listener) {
+  personalCodeChatButton.addEventListener('click', listener);
+}
+
+const personalCodeVideoButton = document.getElementById('personal_code_video_button');
+export function registerPersonalVideoButtonHandler(listener) {
+  personalCodeVideoButton.addEventListener('click', listener);
+}
