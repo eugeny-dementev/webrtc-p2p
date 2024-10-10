@@ -23,6 +23,14 @@ export const assert = {
     throw new TypeError(message);
   },
 
+  oneOf(value, values) {
+    if (values.includes(value)) {
+      return
+    }
+
+    throw new TypeError(`value should be on of ${values.join(',')} but it is: ${value}`);
+  },
+
   isInstanceOf(value, klass, message) {
     if (value instanceof klass) {
       return;
