@@ -21,6 +21,10 @@ io.on('connection', (socket) => {
   console.log('user connected to Socket.IO server', socket.id);
   console.log('connectedPeers', connectedPeers);
 
+  socket.on('pre-offer', (data) => {
+    console.log('pre-offer:', data);
+  });
+
   socket.on('disconnect', () => {
     connectedPeers.delete(socket.id);
     console.log('user disconnected to Socket.IO server', socket.id);
