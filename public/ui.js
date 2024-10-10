@@ -31,3 +31,9 @@ const personalCodeVideoButton = document.getElementById('personal_code_video_but
 export function registerPersonalVideoButtonHandler(listener) {
   personalCodeVideoButton.addEventListener('click', listener);
 }
+
+export function getCalleePersonalCode() {
+  const input = document.getElementById('personal_code_input');
+
+  return input.value;
+}

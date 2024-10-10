@@ -12,10 +12,12 @@ wss.subscribeToSocketEvent('connect', () => {
 ui.registerCopyCodeButtonHandler();
 
 ui.registerPersonalChatButtonHandler(() => {
-  webRTCHandler.sendPreOffer();
+  const code = ui.getCalleePersonalCode();
+  webRTCHandler.sendPreOffer(code);
 })
 
 ui.registerPersonalVideoButtonHandler(() => {
-  webRTCHandler.sendPreOffer();
+  const code = ui.getCalleePersonalCode();
+  webRTCHandler.sendPreOffer(code);
 });
 
