@@ -1,6 +1,6 @@
 export const assert = {
-  isString(str, message) {
-    if (typeof str === 'string') {
+  isString(value, message) {
+    if (typeof value === 'string') {
       return;
     }
 
@@ -8,15 +8,23 @@ export const assert = {
   },
 
   isBoolean(value, message) {
-    if (typeof str === 'boolean') {
+    if (typeof value === 'boolean') {
       return;
     }
 
     throw new TypeError(message);
   },
 
-  isInstanceOf(instance, klass, message) {
-    if (instance instanceof klass) {
+  isFunction(value, message) {
+    if (typeof value === 'function') {
+      return;
+    }
+
+    throw new TypeError(message);
+  },
+
+  isInstanceOf(value, klass, message) {
+    if (value instanceof klass) {
       return;
     }
 
