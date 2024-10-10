@@ -1,7 +1,7 @@
 import { assert } from "./assert.js";
 
 let state = {
-  stocketId: null,
+  socketId: null,
 
   localStream: null,
   remoteStream: null,
@@ -18,8 +18,8 @@ export const setSocketId = (socketId) => {
   assert.isString(socketId, 'socketId should be string');
 
   state = {
-    socketId,
     ...state,
+    socketId,
   };
 }
 
@@ -27,8 +27,8 @@ export const setLocalStream = (stream) => {
   assert.isInstanceOf(stream, MediaStream, "local stream should be instance of MediaStream");
 
   state = {
-    localStream: stream,
     ...state,
+    localStream: stream,
   };
 };
 
@@ -36,8 +36,8 @@ export const setAllowConnectionFromStrangers = (allowConnections) => {
   assert.isBoolean(allowConnections, 'allowConnections should be boolean');
 
   state = {
-    allowConnections,
     ...state,
+    allowConnections,
   };
 };
 
@@ -45,8 +45,8 @@ export const setScreenSharingActive = (screenSharingActive) => {
   assert.isBoolean(screenSharingActive, 'screenSharingActive should be boolean');
 
   state = {
-    screenSharingActive,
     ...state,
+    screenSharingActive,
   };
 };
 
@@ -54,8 +54,8 @@ export const setScreenSharingStream = (stream) => {
   assert.isInstanceOf(stream, MediaStream, "screen sharing stream should be instance of MediaStream");
 
   state = {
-    screenSharingStream: stream,
     ...state,
+    screenSharingStream: stream,
   };
 };
 
@@ -64,8 +64,8 @@ export const setRemoteStream = (stream) => {
   assert.isInstanceOf(stream, MediaStream, "remote stream should be instance of MediaStream");
 
   state = {
-    remoteStream: stream,
     ...state,
+    remoteStream: stream,
   };
 };
 
