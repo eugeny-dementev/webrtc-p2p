@@ -15,3 +15,15 @@ export function sendPreOffer(code, type) {
 
   wss.sendPreOffer(data);
 }
+
+/**
+ * @param data {object}
+ * @param data.callType {string}
+ * @param data.callerPersonalCode {string}
+ */
+export function handlePreOffer(data) {
+  assert.oneOf(data.callType, Object.values(callType));
+  assert.isString(data.callerSocketId, 'data.callerSocketId should be a string');
+
+  console.log('Callee received preOffer', data);
+}

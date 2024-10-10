@@ -21,8 +21,20 @@ io.on('connection', (socket) => {
   console.log('user connected to Socket.IO server', socket.id);
   console.log('connectedPeers', connectedPeers);
 
-  socket.on('pre-offer', (data) => {
-    console.log('pre-offer:', data);
+  socket.on('pre-offer', (callerPayload) => {
+    console.log('pre-offer:', callerPayload);
+
+    if (!connectedPeers.has(callerPayload.calleePersonalCode)) {
+      return;
+    }
+
+    const calleePayload = {
+      callerSocketId: socket.id,
+      callType: callerPayload.callType,
+    };
+
+    console.log('sending offer to callee:', calleePayload);
+    io.to(callerPayload.calleePersonalCode).emit('pre-offer', calleePayload);
   });
 
   socket.on('disconnect', () => {
