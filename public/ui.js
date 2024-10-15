@@ -41,7 +41,7 @@ export function getCalleePersonalCode() {
 }
 
 export function showCallingDialog(callType, acceptCallHandler, rejectCallHandler) {
-  assert.oneOf(data.callType, Object.values(CALL_TYPE));
+  assert.oneOf(callType, Object.values(CALL_TYPE));
   assert.isFunction(acceptCallHandler, 'acceptCallHandler should be a function');
   assert.isFunction(rejectCallHandler, 'rejectCallHandler should be a function');
 

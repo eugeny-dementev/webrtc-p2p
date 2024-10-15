@@ -37,7 +37,7 @@ export function handlePreOffer(data) {
     ui.showCallingDialog(callType, acceptCallHandler, rejectCallHandler);
   }
 
-  console.log('Callee received preOffer', data);
+  console.log('Callee received preOffer', connectedUserDetails);
 }
 
 function acceptCallHandler() { 
