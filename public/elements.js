@@ -1,4 +1,4 @@
-import { CALL_INFO } from "./constants";
+import { CALL_INFO } from "./constants.js";
 
 export function getIncomingCallDialog(callTypeInfo, acceptCallHandler, rejectCallHandler) {
   assert.oneOf(data.callType, Object.values(CALL_INFO));
