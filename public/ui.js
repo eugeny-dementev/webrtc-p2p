@@ -1,5 +1,6 @@
 import { assert } from "./assert.js";
 import * as store from "./store.js";
+import { CALL_TYPE, CALL_TYPE_TO_INFO } from "./constants.js";
 
 export function updatePersonalCode(code) {
   assert.isString(code, 'code should be a string');
@@ -36,4 +37,8 @@ export function getCalleePersonalCode() {
   const input = document.getElementById('personal_code_input');
 
   return input.value;
+}
+
+export function showCallingDialog(callType, acceptCallHandler, rejectCallHandler) {
+  const callTypeInfo = CALL_TYPE_TO_INFO[callType];
 }
