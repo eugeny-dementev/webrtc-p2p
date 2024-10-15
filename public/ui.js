@@ -1,6 +1,7 @@
 import { assert } from "./assert.js";
-import * as store from "./store.js";
 import { CALL_TYPE, CALL_TYPE_TO_INFO } from "./constants.js";
+import * as elements from './elements.js';
+import * as store from "./store.js";
 
 export function updatePersonalCode(code) {
   assert.isString(code, 'code should be a string');
@@ -40,5 +41,11 @@ export function getCalleePersonalCode() {
 }
 
 export function showCallingDialog(callType, acceptCallHandler, rejectCallHandler) {
+  assert.oneOf(data.callType, Object.values(CALL_TYPE));
+  assert.isFunction(acceptCallHandler, 'acceptCallHandler should be a function');
+  assert.isFunction(rejectCallHandler, 'rejectCallHandler should be a function');
+
   const callTypeInfo = CALL_TYPE_TO_INFO[callType];
+
+  const incomingCallDialog = elements.getIncomingCallDialog(callTypeInfo, acceptCallHandler, rejectCallHandler);
 }

@@ -1,7 +1,7 @@
 import { assert } from "./assert.js";
 import { CALL_TYPE } from "./constants.js";
-import * as wss from './wss.js';
 import * as ui from './ui.js';
+import * as wss from './wss.js';
 
 export function sendPreOffer(code, type) {
   assert.isString(code, 'offer code should be a string');
