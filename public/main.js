@@ -1,4 +1,4 @@
-import { callType } from './constants.js';
+import { CALL_TYPE } from './constants.js';
 import * as store from './store.js';
 import * as ui from './ui.js';
 import * as webRTCHandler from './webRTCHandler.js';
@@ -18,10 +18,10 @@ ui.registerCopyCodeButtonHandler();
 ui.registerPersonalChatButtonHandler(() => {
   const code = ui.getCalleePersonalCode();
 
-  webRTCHandler.sendPreOffer(code, callType.PersonalCall);
+  webRTCHandler.sendPreOffer(code, CALL_TYPE.PersonalCall);
 })
 ui.registerPersonalVideoButtonHandler(() => {
   const code = ui.getCalleePersonalCode();
 
-  webRTCHandler.sendPreOffer(code, callType.PersonalChat);
+  webRTCHandler.sendPreOffer(code, CALL_TYPE.PersonalChat);
 });

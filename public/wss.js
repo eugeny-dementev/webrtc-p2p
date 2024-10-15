@@ -1,5 +1,5 @@
 import { assert } from './assert.js';
-import { callType } from './constants.js';
+import { CALL_TYPE } from './constants.js';
 
 export const socket = io('/');
 
@@ -17,7 +17,7 @@ export function subscribeToSocketEvent(event, listener) {
  * @param data.calleePersonalCode {string}
  */
 export function sendPreOffer(data) {
-  assert.oneOf(data.callType, Object.values(callType));
+  assert.oneOf(data.callType, Object.values(CALL_TYPE));
   assert.isString(data.calleePersonalCode, 'data.calleePersonalCode should be a string');
 
   socket.emit('pre-offer', data);
