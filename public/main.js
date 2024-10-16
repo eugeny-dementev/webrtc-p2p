@@ -18,10 +18,10 @@ ui.registerCopyCodeButtonHandler();
 ui.registerPersonalChatButtonHandler(() => {
   const code = ui.getCalleePersonalCode();
 
-  webRTCHandler.sendPreOffer(code, CALL_TYPE.PersonalCall);
+  webRTCHandler.sendPreOffer(code, CALL_TYPE.PersonalChat);
 })
 ui.registerPersonalVideoButtonHandler(() => {
   const code = ui.getCalleePersonalCode();
 
-  webRTCHandler.sendPreOffer(code, CALL_TYPE.PersonalChat);
+  webRTCHandler.sendPreOffer(code, CALL_TYPE.PersonalCall);
 });
