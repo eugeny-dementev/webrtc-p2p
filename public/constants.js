@@ -4,8 +4,8 @@ export const CALL_TYPE = {
 };
 
 export const CALL_INFO = {
-  Chat: 'chat',
-  Video: 'video',
+  Chat: 'Chat',
+  Video: 'Video',
 };
 
 export const CALL_TYPE_TO_INFO = {
