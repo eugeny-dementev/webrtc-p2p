@@ -3,14 +3,14 @@ import { CALL_TYPE } from "./constants.js";
 import * as ui from './ui.js';
 import * as wss from './wss.js';
 
-export function sendPreOffer(code, type) {
+export function sendPreOffer(code, callType) {
   assert.isString(code, 'offer code should be a string');
-  assert.oneOf(type, Object.values(CALL_TYPE));
+  assert.oneOf(callType, Object.values(CALL_TYPE));
 
-  console.log('preOffer function run', code, type);
+  console.log('preOffer function run', code, callType);
 
   const data = {
-    callType: type,
+    callType: callType,
     calleePersonalCode: code,
   };
 
