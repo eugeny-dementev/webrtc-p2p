@@ -58,6 +58,5 @@ export function getIncomingCallDialog(callTypeInfo, acceptCallHandler, rejectCal
 
   dialogContent.appendChild(buttonsContainer);
 
-  const dialogHTML = document.getElementById('dialog');
-  dialogHTML.appendChild(dialog);
+  return dialog;
 }

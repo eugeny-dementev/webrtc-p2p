@@ -48,4 +48,8 @@ export function showCallingDialog(callType, acceptCallHandler, rejectCallHandler
   const callTypeInfo = CALL_TYPE_TO_INFO[callType];
 
   const incomingCallDialog = elements.getIncomingCallDialog(callTypeInfo, acceptCallHandler, rejectCallHandler);
+
+  const dialogHTML = document.getElementById('dialog');
+  dialogHTML.innerHTML = '';
+  dialogHTML.appendChild(incomingCallDialog);
 }
