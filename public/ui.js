@@ -40,7 +40,7 @@ export function getCalleePersonalCode() {
   return input.value;
 }
 
-export function showCallingDialog(callType, acceptCallHandler, rejectCallHandler) {
+export function showIncomingCallingDialog(callType, acceptCallHandler, rejectCallHandler) {
   assert.oneOf(callType, Object.values(CALL_TYPE));
   assert.isFunction(acceptCallHandler, 'acceptCallHandler should be a function');
   assert.isFunction(rejectCallHandler, 'rejectCallHandler should be a function');
@@ -52,4 +52,14 @@ export function showCallingDialog(callType, acceptCallHandler, rejectCallHandler
   const dialogHTML = document.getElementById('dialog');
   dialogHTML.innerHTML = '';
   dialogHTML.appendChild(incomingCallDialog);
+}
+
+export function showCallingDialog(cancelCallHandler) {
+  assert.isFunction(cancelCallHandler, 'cancelCallHandler should be a function');
+
+  const callDialog = elements.getCallingDialog(cancelCallHandler);
+
+  const dialogHTML = document.getElementById('dialog');
+  dialogHTML.innerHTML = '';
+  dialogHTML.appendChild(callDialog);
 }

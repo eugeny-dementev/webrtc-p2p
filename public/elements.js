@@ -60,3 +60,51 @@ export function getIncomingCallDialog(callTypeInfo, acceptCallHandler, rejectCal
 
   return dialog;
 }
+
+export function getCallingDialog(cancelCallHandler) {
+  assert.isFunction(cancelCallHandler, 'cancelCallHandler should be a function');
+
+  console.log('elements.js calling');
+
+  const dialog = document.createElement('div');
+  dialog.classList.add('dialog_wrapper');
+
+  const dialogContent = document.createElement('div');
+  dialogContent.classList.add('dialog_content');
+
+  dialog.appendChild(dialogContent);
+
+  const title = document.createElement('p');
+  title.classList.add('dialog_title');
+  title.innerHTML = `Calling`;
+
+  const imageContainer = document.createElement('div');
+  imageContainer.classList.add('dialog_image_container');
+  const image = document.createElement('img');
+  image.classList.add('dialog_image');
+  const avatarImagePath = './utils/images/dialogAvatar.png';
+  image.src = avatarImagePath;
+
+  imageContainer.appendChild(image);
+
+  dialogContent.appendChild(title);
+  dialogContent.appendChild(imageContainer);
+
+  const buttonsContainer = document.createElement('div');
+  buttonsContainer.classList.add('dialog_button_container');
+
+  const hangupButton = document.createElement('button');
+  hangupButton.classList.add('dialog_reject_call_button');
+  const hangupCallImage = document.createElement('img');
+  hangupCallImage.classList.add('dialog_button_image');
+  const hangupImagePath = './utils/images/rejectCall.png';
+  hangupCallImage.src = hangupImagePath;
+  hangupButton.appendChild(hangupCallImage);
+  hangupButton.addEventListener('click', cancelCallHandler);
+
+  buttonsContainer.appendChild(hangupButton);
+
+  dialogContent.appendChild(buttonsContainer);
+
+  return dialog;
+}

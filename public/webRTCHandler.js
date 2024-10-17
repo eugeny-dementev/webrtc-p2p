@@ -3,18 +3,29 @@ import { CALL_TYPE } from "./constants.js";
 import * as ui from './ui.js';
 import * as wss from './wss.js';
 
-export function sendPreOffer(code, callType) {
-  assert.isString(code, 'offer code should be a string');
+let connectedUserDetails;
+
+export function sendPreOffer(calleePersonalCode, callType) {
+  assert.isString(calleePersonalCode, 'offer code should be a string');
   assert.oneOf(callType, Object.values(CALL_TYPE));
 
-  console.log('preOffer function run', code, callType);
+  console.log('preOffer function run', calleePersonalCode, callType);
 
-  const data = {
-    callType: callType,
-    calleePersonalCode: code,
-  };
+  connectedUserDetails = {
+    callType,
+    socketId: calleePersonalCode,
+  }
 
-  wss.sendPreOffer(data);
+  if (callType === CALL_TYPE.PersonalChat || callType === CALL_TYPE.PersonalCall) {
+    const data = {
+      callType: callType,
+      calleePersonalCode: calleePersonalCode,
+    };
+
+    ui.showCallingDialog(cancelCallHandler);
+
+    wss.sendPreOffer(data);
+  }
 }
 
 /**
@@ -34,15 +45,18 @@ export function handlePreOffer(data) {
   };
 
   if (callType === CALL_TYPE.PersonalChat || callType === CALL_TYPE.PersonalCall) {
-    ui.showCallingDialog(callType, acceptCallHandler, rejectCallHandler);
+    ui.showIncomingCallingDialog(callType, acceptCallHandler, rejectCallHandler);
   }
 
   console.log('Callee received preOffer', connectedUserDetails);
 }
 
-function acceptCallHandler() { 
+function acceptCallHandler() {
   console.log('acceptCallHandler()');
 }
 function rejectCallHandler() {
   console.log('rejectCallHandler()');
+}
+function cancelCallHandler() {
+  console.log('cancelCallHandler()');
 }
