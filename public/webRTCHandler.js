@@ -86,26 +86,24 @@ export function handlePreOfferAnswer(data) {
 
   console.log('preOfferAnswer came', data);
 
-  if (data.preOfferAnswer === PRE_OFFER_ANSWER.CALLEE_NOT_FOUND) {
-    // show dialog that callee not found
-    return;
+  switch (data.preOfferAnswer) {
+    case PRE_OFFER_ANSWER.CALLEE_NOT_FOUND: {
+      break;
+    };
+    case PRE_OFFER_ANSWER.CALL_ACCEPTED: {
+      // send webRTC offer
+      break;
+    };
+    case PRE_OFFER_ANSWER.CALL_REJECTED: {
+      break;
+    };
+    case PRE_OFFER_ANSWER.CALLEE_UNAVAILABLE: {
+      break;
+    };
+    default: {
+      throw new TypeError('Improsible pre offer answer value', data.preOfferAnswer);
+    }
   }
 
-  if (data.preOfferAnswer === PRE_OFFER_ANSWER.CALL_UNAVAILABLE) {
-    // callee unable to connect
-    return;
-  }
-
-  if (data.preOfferAnswer === PRE_OFFER_ANSWER.CALL_REJECTED) {
-    // call rejected by callee
-    return;
-  }
-
-  if (data.preOfferAnswer !== PRE_OFFER_ANSWER.CALL_ACCEPTED) {
-    throw new TypeError('Improsible pre offer answer value', data.preOfferAnswer);
-  }
-
-  // assuming pre-offer is CALL_ACCEPTED
-  // send webRTC offer
   ui.removeAllDialogs();
 }
