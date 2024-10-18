@@ -1,6 +1,7 @@
 const express = require('express');
 const http = require('http');
 const path = require('path');
+const assert = require('./assert');
 
 const PORT = process.env.PORT || 3030;
 
@@ -31,10 +32,18 @@ io.on('connection', (socket) => {
     const calleePayload = {
       callerSocketId: socket.id,
       callType: callerPayload.callType,
+      side: callerPayload.side,
     };
 
     console.log('sending offer to callee:', calleePayload);
     io.to(callerPayload.calleePersonalCode).emit('pre-offer', calleePayload);
+  });
+
+  socket.on('pre-offer-answer', (data) => {
+    assert.isString(data.preOfferAnswer, 'data.preOfferAnswer should be a string: ' + data.preOfferAnswer);
+    assert.isString(data.callerSocketId, 'data.callerSocketId should be a string' + data.callerSocketId);
+
+    console.log('pre-offer-answer received:', data);
   });
 
   socket.on('disconnect', () => {

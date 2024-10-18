@@ -22,3 +22,10 @@ export function sendPreOffer(data) {
 
   socket.emit('pre-offer', data);
 }
+
+export function sendPreOfferAnswer(data) {
+  assert.isString(data.preOfferAnswer, 'data.preOfferAnswer should be a string');
+  assert.isString(data.callerSocketId, 'data.callerSocketId should be a string');
+
+  socket.emit('pre-offer-answer', data);
+}

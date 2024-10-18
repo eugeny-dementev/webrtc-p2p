@@ -1,5 +1,5 @@
 import { assert } from "./assert.js";
-import { CALL_TYPE } from "./constants.js";
+import { CALL_TYPE, PRE_OFFER_ANSWER } from "./constants.js";
 import * as ui from './ui.js';
 import * as wss from './wss.js';
 
@@ -14,12 +14,14 @@ export function sendPreOffer(calleePersonalCode, callType) {
   connectedUserDetails = {
     callType,
     socketId: calleePersonalCode,
+    side: 'Sending',
   }
 
   if (callType === CALL_TYPE.PersonalChat || callType === CALL_TYPE.PersonalCall) {
     const data = {
       callType: callType,
       calleePersonalCode: calleePersonalCode,
+      side: connectedUserDetails.side,
     };
 
     ui.showCallingDialog(cancelCallHandler);
@@ -39,9 +41,10 @@ export function handlePreOffer(data) {
 
   const { callType, callerSocketId } = data;
 
-  const connectedUserDetails = {
+  connectedUserDetails = {
     socketId: callerSocketId,
     callType,
+    side: 'Receiving',
   };
 
   if (callType === CALL_TYPE.PersonalChat || callType === CALL_TYPE.PersonalCall) {
@@ -53,10 +56,26 @@ export function handlePreOffer(data) {
 
 function acceptCallHandler() {
   console.log('acceptCallHandler()');
+  sendPreOfferAnswer(PRE_OFFER_ANSWER.CALL_ACCEPTED);
 }
+
 function rejectCallHandler() {
   console.log('rejectCallHandler()');
+  sendPreOfferAnswer(PRE_OFFER_ANSWER.CALL_REJECTED);
 }
+
 function cancelCallHandler() {
   console.log('cancelCallHandler()');
+}
+
+function sendPreOfferAnswer(preOfferAnswer) {
+  assert.oneOf(preOfferAnswer, Object.values(PRE_OFFER_ANSWER));
+
+  const data = {
+    callerSocketId: connectedUserDetails.socketId,
+    side: connectedUserDetails.side,
+    preOfferAnswer: preOfferAnswer,
+  };
+
+  wss.sendPreOfferAnswer(data);
 }
