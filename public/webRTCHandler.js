@@ -77,6 +77,7 @@ function sendPreOfferAnswer(preOfferAnswer) {
     preOfferAnswer,
   };
 
+  ui.removeAllDialogs();
   wss.sendPreOfferAnswer(data);
 }
 
@@ -106,4 +107,5 @@ export function handlePreOfferAnswer(data) {
 
   // assuming pre-offer is CALL_ACCEPTED
   // send webRTC offer
+  ui.removeAllDialogs();
 }

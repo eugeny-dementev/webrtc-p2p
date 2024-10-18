@@ -63,3 +63,8 @@ export function showCallingDialog(cancelCallHandler) {
   dialogHTML.innerHTML = '';
   dialogHTML.appendChild(callDialog);
 }
+
+export function removeAllDialogs() {
+  const dialogHTML = document.getElementById('dialog');
+  dialogHTML.innerHTML = '';
+}
