@@ -22,21 +22,21 @@ io.on('connection', (socket) => {
   console.log('user connected to Socket.IO server', socket.id);
   console.log('connectedPeers', connectedPeers);
 
-  socket.on('pre-offer', (callerPayload) => {
-    console.log('pre-offer:', callerPayload);
+  socket.on('pre-offer', (data) => {
+    console.log('pre-offer:', data);
 
-    if (!connectedPeers.has(callerPayload.calleePersonalCode)) {
+    if (!connectedPeers.has(data.calleePersonalCode)) {
       return;
     }
 
     const calleePayload = {
       callerSocketId: socket.id,
-      callType: callerPayload.callType,
-      side: callerPayload.side,
+      callType: data.callType,
+      side: data.side,
     };
 
     console.log('sending offer to callee:', calleePayload);
-    io.to(callerPayload.calleePersonalCode).emit('pre-offer', calleePayload);
+    io.to(data.calleePersonalCode).emit('pre-offer', calleePayload);
   });
 
   socket.on('pre-offer-answer', (data) => {
@@ -44,6 +44,13 @@ io.on('connection', (socket) => {
     assert.isString(data.callerSocketId, 'data.callerSocketId should be a string' + data.callerSocketId);
 
     console.log('pre-offer-answer received:', data);
+
+    if (!connectedPeers.has(data.callerSocketId)) {
+      console.log('Caller not found', data.callerSocketId);
+      return;
+    }
+
+    io.to(data.callerSocketId).emit('pre-offer-answer', data);
   });
 
   socket.on('disconnect', () => {

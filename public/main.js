@@ -12,6 +12,9 @@ wss.subscribeToSocketEvent('connect', () => {
 wss.subscribeToSocketEvent('pre-offer', (data) => {
   webRTCHandler.handlePreOffer(data)
 });
+wss.subscribeToSocketEvent('pre-offer-answer', (data) => {
+  webRTCHandler.handlePreOfferAnswer(data);
+});
 
 ui.registerCopyCodeButtonHandler();
 
