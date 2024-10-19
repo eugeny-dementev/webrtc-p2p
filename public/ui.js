@@ -112,3 +112,19 @@ export function showInfoDialog(preOfferAnswer) {
     }, 4000);
   }
 }
+
+export function enableDashboard() {
+  const dashboardBlocker = document.getElementById('dashboard_blur')
+
+  if (!dashboardBlocker.classList.contains('display_none')) {
+    dashboardBlocker.classList.add('display_none');
+  }
+}
+
+export function disableDashboard() {
+  const dashboardBlocker = document.getElementById('dashboard_blur')
+
+  if (dashboardBlocker.classList.contains('display_none')) {
+    dashboardBlocker.classList.remove('display_none');
+  }
+}
