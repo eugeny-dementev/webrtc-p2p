@@ -87,23 +87,19 @@ export function handlePreOfferAnswer(data) {
   console.log('preOfferAnswer came', data);
 
   switch (data.preOfferAnswer) {
-    case PRE_OFFER_ANSWER.CALLEE_NOT_FOUND: {
-      break;
-    };
-    case PRE_OFFER_ANSWER.CALL_ACCEPTED: {
-      // send webRTC offer
-      break;
-    };
+    case PRE_OFFER_ANSWER.CALLEE_UNAVAILABLE:
+    case PRE_OFFER_ANSWER.CALLEE_NOT_FOUND:
     case PRE_OFFER_ANSWER.CALL_REJECTED: {
+      ui.showInfoDialog(data.preOfferAnswer);
       break;
-    };
-    case PRE_OFFER_ANSWER.CALLEE_UNAVAILABLE: {
+    }
+    case PRE_OFFER_ANSWER.CALL_ACCEPTED: {
+      ui.removeAllDialogs();
       break;
     };
     default: {
+      ui.removeAllDialogs();
       throw new TypeError('Improsible pre offer answer value', data.preOfferAnswer);
     }
   }
-
-  ui.removeAllDialogs();
 }

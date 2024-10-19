@@ -1,5 +1,5 @@
 import { assert } from "./assert.js";
-import { CALL_TYPE, CALL_TYPE_TO_INFO } from "./constants.js";
+import { CALL_TYPE, CALL_TYPE_TO_INFO, PRE_OFFER_ANSWER } from "./constants.js";
 import * as elements from './elements.js';
 import * as store from "./store.js";
 
@@ -67,4 +67,48 @@ export function showCallingDialog(cancelCallHandler) {
 export function removeAllDialogs() {
   const dialogHTML = document.getElementById('dialog');
   dialogHTML.innerHTML = '';
+}
+
+export function showInfoDialog(preOfferAnswer) {
+  assert.oneOf(preOfferAnswer, Object.values(PRE_OFFER_ANSWER));
+
+  let infoDialog = null;
+
+  switch (preOfferAnswer) {
+    case PRE_OFFER_ANSWER.CALL_REJECTED: {
+      infoDialog = elements.getInfoDialog(
+        'Call rejected',
+        'Callee rejected your call',
+      );
+
+      break;
+    }
+    case PRE_OFFER_ANSWER.CALLEE_NOT_FOUND: {
+      infoDialog = elements.getInfoDialog(
+        'Call not found',
+        'Please check provided personal code',
+      );
+
+      break;
+    }
+    case PRE_OFFER_ANSWER.CALLEE_UNAVAILABLE: {
+      infoDialog = elements.getInfoDialog(
+        'Call is not possible',
+        'Probably callee is busy. Please try again later',
+      );
+
+      break;
+    }
+    default: throw new TypeError('Unexpected preOfferAnswer ' + preOfferAnswer);
+  }
+
+  if (infoDialog) {
+    const dialogHTML = document.getElementById('dialog');
+    dialogHTML.innerHTML = '';
+    dialogHTML.appendChild(infoDialog);
+
+    setTimeout(() => {
+      removeAllDialogs()
+    }, 4000);
+  }
 }

@@ -108,3 +108,42 @@ export function getCallingDialog(cancelCallHandler) {
 
   return dialog;
 }
+
+export function getInfoDialog(titleStr, descriptionStr) {
+  assert.isString(titleStr, 'Title should be a string');
+  assert.isString(descriptionStr, 'Description should be a string');
+
+  console.log('elements.js info dialog');
+
+  const dialog = document.createElement('div');
+  dialog.classList.add('dialog_wrapper');
+
+  const dialogContent = document.createElement('div');
+  dialogContent.classList.add('dialog_content');
+
+  dialog.appendChild(dialogContent);
+
+  const title = document.createElement('p');
+  title.classList.add('dialog_title');
+  title.innerHTML = titleStr;
+
+  const imageContainer = document.createElement('div');
+  imageContainer.classList.add('dialog_image_container');
+  const image = document.createElement('img');
+  image.classList.add('dialog_image');
+  const avatarImagePath = './utils/images/dialogAvatar.png';
+  image.src = avatarImagePath;
+
+  imageContainer.appendChild(image);
+
+  const description = document.createElement('p');
+  description.classList.add('dialog_description');
+  description.innerHTML = descriptionStr;
+
+
+  dialogContent.appendChild(title);
+  dialogContent.appendChild(imageContainer);
+  dialogContent.appendChild(description);
+
+  return dialog;
+}
