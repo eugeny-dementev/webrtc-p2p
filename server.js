@@ -2,6 +2,7 @@ const express = require('express');
 const http = require('http');
 const path = require('path');
 const assert = require('./assert');
+const { PRE_OFFER_ANSWER } = require('./constants');
 
 const PORT = process.env.PORT || 3030;
 
@@ -26,6 +27,10 @@ io.on('connection', (socket) => {
     console.log('pre-offer:', data);
 
     if (!connectedPeers.has(data.calleePersonalCode)) {
+      io.to(socket.id).emit('pre-offer-answer', {
+        preOfferAnswer: PRE_OFFER_ANSWER.CALLEE_NOT_FOUND,
+      });
+
       return;
     }
 
