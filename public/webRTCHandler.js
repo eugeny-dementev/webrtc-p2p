@@ -57,6 +57,7 @@ export function handlePreOffer(data) {
 function acceptCallHandler() {
   console.log('acceptCallHandler()');
   sendPreOfferAnswer(PRE_OFFER_ANSWER.CALL_ACCEPTED);
+  ui.showCallElements(connectedUserDetails.callType);
 }
 
 function rejectCallHandler() {
