@@ -113,11 +113,46 @@ export function showInfoDialog(preOfferAnswer) {
   }
 }
 
+export function showCallElements(callType) {
+  if (callType === CALL_TYPE.PersonalChat) {
+    showChatCallElements();
+  }
+
+  if (callType === CALL_TYPE.PersonalCall) {
+    showChatCallElements();
+  }
+}
+
+export function showChatCallElements() {
+  const chatButtonContainer = document.getElementById('finish_chat_button_container');
+  showElement(chatButtonContainer);
+
+  const newMessageInput = document.getElementById('new_message');
+  showElement(newMessageInput);
+
+  // block panel until chat is ended
+  disableDashboard();
+}
+
+export function showVideoCallElements() {
+  const callButtons = document.getElementById('call_buttons');
+  showElement(callButtons);
+
+  const remoteVideo = document.getElementById('remote_video');
+  showElement(remoteVideo);
+
+  const newMessageInput = document.getElementById('new_message');
+  showElement(newMessageInput);
+
+  // block panel until call is ended
+  disableDashboard();
+}
+
 export function enableDashboard() {
   const dashboardBlocker = document.getElementById('dashboard_blur')
 
   if (!dashboardBlocker.classList.contains('display_none')) {
-    dashboardBlocker.classList.add('display_none');
+    hideElement(dashboardBlocker);
   }
 }
 
@@ -125,6 +160,18 @@ export function disableDashboard() {
   const dashboardBlocker = document.getElementById('dashboard_blur')
 
   if (dashboardBlocker.classList.contains('display_none')) {
-    dashboardBlocker.classList.remove('display_none');
+    showElement(dashboardBlocker);
+  }
+}
+
+export function hideElement(element) {
+  if (!element.classList.contains('display_none')) {
+    element.classList.add('display_none');
+  }
+}
+
+export function showElement(element) {
+  if (element.classList.contains('display_none')) {
+    element.classList.remove('display_none');
   }
 }
