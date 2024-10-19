@@ -142,6 +142,9 @@ export function showVideoCallElements() {
   const callButtons = document.getElementById('call_buttons');
   showElement(callButtons);
 
+  const videoPlaceholder = document.getElementById('videos_placeholder');
+  hideElement(videoPlaceholder);
+
   const remoteVideo = document.getElementById('remote_video');
   showElement(remoteVideo);
 
