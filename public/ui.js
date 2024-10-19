@@ -114,12 +114,16 @@ export function showInfoDialog(preOfferAnswer) {
 }
 
 export function showCallElements(callType) {
+  assert.oneOf(callType, [CALL_TYPE.PersonalChat, CALL_TYPE.PersonalCall]);
+
+  console.log('showCallElements(callType)', callType);
+
   if (callType === CALL_TYPE.PersonalChat) {
     showChatCallElements();
   }
 
   if (callType === CALL_TYPE.PersonalCall) {
-    showChatCallElements();
+    showVideoCallElements();
   }
 }
 

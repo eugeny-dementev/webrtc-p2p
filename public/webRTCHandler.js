@@ -95,6 +95,7 @@ export function handlePreOfferAnswer(data) {
     }
     case PRE_OFFER_ANSWER.CALL_ACCEPTED: {
       ui.removeAllDialogs();
+      ui.showCallElements(connectedUserDetails.callType);
       break;
     };
     default: {
