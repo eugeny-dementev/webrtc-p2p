@@ -4,8 +4,7 @@
   "description": "Video Chat app to learn WebRTC",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev:server": "nodemon server.js"
   },
   "keywords": [
     "webrtc",
