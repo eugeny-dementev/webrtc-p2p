@@ -4,7 +4,8 @@
   "description": "Video Chat app to learn WebRTC",
   "main": "index.js",
   "scripts": {
-    "dev:server": "nodemon server.js"
+    "dev:frontend": "webpack serve -c webpack/webpack.config.dev.ts --mode=development",
+    "dev:backend": "nodemon server.js"
   },
   "keywords": [
     "webrtc",
