@@ -13,7 +13,10 @@ const dev: Configuration & { devServer: DevServerConfiguration } = {
     compress: true,
     hot: true,
     port: 9001,
-    static: false,
+    static: {
+      directory: path.join(__dirname, '../public/utils'),
+      publicPath: '/utils'
+    },
     watchFiles: ["src/**/*"],
   },
   plugins: [
