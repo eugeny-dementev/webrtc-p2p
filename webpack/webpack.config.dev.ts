@@ -10,6 +10,12 @@ const dev: Configuration & { devServer: DevServerConfiguration } = {
   ...config,
   devtool: "inline-source-map",
   devServer: {
+    proxy: {
+      '/socket.io': {
+        target: 'ws://localhost:3030',
+        ws: true,
+      },
+    },
     compress: true,
     hot: true,
     port: 9001,
