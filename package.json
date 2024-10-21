@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev:frontend": "webpack serve -c webpack/webpack.config.dev.ts --mode=development",
-    "dev:backend": "nodemon server.js"
+    "dev:backend": "nodemon ./src/back/server.js"
   },
   "keywords": [
     "webrtc",
