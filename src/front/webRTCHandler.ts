@@ -101,7 +101,7 @@ export function handlePreOfferAnswer(data) {
     };
     default: {
       ui.removeAllDialogs();
-      throw new TypeError('Improsible pre offer answer value', data.preOfferAnswer);
+      throw new TypeError('Improsible pre offer answer value' + data.preOfferAnswer);
     }
   }
 }

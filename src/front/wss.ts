@@ -1,6 +1,7 @@
 import { assert } from './assert';
 import { CALL_TYPE } from './constants';
 
+//@ts-ignore
 export const socket = io('/');
 
 export function subscribeToSocketEvent(event, listener) {
