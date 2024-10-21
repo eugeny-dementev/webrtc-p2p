@@ -1,8 +1,8 @@
-import { CALL_TYPE } from './constants.js';
-import * as store from './store.js';
-import * as ui from './ui.js';
-import * as webRTCHandler from './webRTCHandler.js';
-import * as wss from './wss.js';
+import { CALL_TYPE } from './constants';
+import * as store from './store';
+import * as ui from './ui';
+import * as webRTCHandler from './webRTCHandler';
+import * as wss from './wss';
 
 export function initialize() {
   wss.subscribeToSocketEvent('connect', () => {

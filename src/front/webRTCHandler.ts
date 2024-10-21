@@ -1,7 +1,7 @@
-import { assert } from "./assert.js";
-import { CALL_TYPE, PRE_OFFER_ANSWER } from "./constants.js";
-import * as ui from './ui.js';
-import * as wss from './wss.js';
+import { assert } from "./assert";
+import { CALL_TYPE, PRE_OFFER_ANSWER } from "./constants";
+import * as ui from './ui';
+import * as wss from './wss';
 
 let connectedUserDetails;
 

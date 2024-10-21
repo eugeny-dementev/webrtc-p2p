@@ -1,7 +1,7 @@
-import { assert } from "./assert.js";
-import { CALL_TYPE, CALL_TYPE_TO_INFO, PRE_OFFER_ANSWER } from "./constants.js";
-import * as elements from './elements.js';
-import * as store from "./store.js";
+import { assert } from "./assert";
+import { CALL_TYPE, CALL_TYPE_TO_INFO, PRE_OFFER_ANSWER } from "./constants";
+import * as elements from './elements';
+import * as store from "./store";
 
 export function updatePersonalCode(code) {
   assert.isString(code, 'code should be a string');

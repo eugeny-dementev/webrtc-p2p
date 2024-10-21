@@ -1,5 +1,5 @@
-import { assert } from './assert.js';
-import { CALL_TYPE } from './constants.js';
+import { assert } from './assert';
+import { CALL_TYPE } from './constants';
 
 export const socket = io('/');
 
