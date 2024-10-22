@@ -20,7 +20,9 @@ export function registerCopyCodeButtonHandler() {
 
     assert.isString(code, 'copied code should be a string');
 
-    navigator.clipboard && navigator.clipboard.writeText(code);
+    if (document.hasFocus()) {
+      navigator.clipboard && navigator.clipboard.writeText(code);
+    }
   });
 }
 
