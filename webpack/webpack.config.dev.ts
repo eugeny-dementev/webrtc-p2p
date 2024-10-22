@@ -12,13 +12,15 @@ const dev: Configuration & { devServer: DevServerConfiguration } = {
   devServer: {
     proxy: {
       '/socket.io': {
-        target: 'ws://localhost:3030',
+        target: 'http://localhost:3030',
+        secure: false,
         ws: true,
       },
     },
-    compress: true,
+    compress: false,
     hot: true,
     port: 9001,
+    host: 'localhost',
     static: {
       directory: path.join(__dirname, '../public/utils'),
       publicPath: '/utils'
@@ -41,7 +43,11 @@ const dev: Configuration & { devServer: DevServerConfiguration } = {
     new BrowserSyncPlugin(
       {
         port: 3000,
-        proxy: "http://localhost:9001",
+        proxy: {
+          changeOrigin: true,
+          target: "http://localhost:9001",
+          ws: true,
+        },
         open: false,
       },
       { reload: true },

@@ -2,7 +2,10 @@ import { assert } from './assert';
 import { CALL_TYPE } from './constants';
 
 //@ts-ignore
-export const socket = io('/');
+export const socket = io('http://localhost:3030', {
+  transports: ['websocket', 'polling'],
+  upgrade: true,
+});
 
 export function subscribeToSocketEvent(event, listener) {
   assert.isString(event, 'event should be a string');

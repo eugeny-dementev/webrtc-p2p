@@ -1,16 +1,19 @@
 const express = require('express');
 const http = require('http');
 const path = require('path');
+const cors = require('cors');
 const assert = require('./assert');
 const { PRE_OFFER_ANSWER } = require('./constants');
 
 const PORT = process.env.PORT || 3030;
 
 const app = express();
+
+app.use(cors());
+app.use(express.static('public'));
+
 const server = http.createServer(app);
 const io = require('socket.io')(server);
-
-app.use(express.static('public'));
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(process.cwd(), 'public/index.html'));
