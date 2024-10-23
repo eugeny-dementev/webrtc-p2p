@@ -1,5 +1,4 @@
-import { Configuration, WebpackPluginInstance } from "webpack";
-import BrowserSyncPlugin from "browser-sync-webpack-plugin";
+import { Configuration } from "webpack";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import { Configuration as DevServerConfiguration } from "webpack-dev-server";
@@ -40,18 +39,6 @@ const dev: Configuration & { devServer: DevServerConfiguration } = {
       filename: "[name].css",
       chunkFilename: "style.css",
     }),
-    new BrowserSyncPlugin(
-      {
-        port: 3000,
-        proxy: {
-          changeOrigin: true,
-          target: "http://localhost:9001",
-          ws: true,
-        },
-        open: false,
-      },
-      { reload: true },
-    ) as unknown as WebpackPluginInstance,
   ],
 };
 
