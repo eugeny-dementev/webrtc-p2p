@@ -1,16 +1,19 @@
 const express = require('express');
 const http = require('http');
 const path = require('path');
+const cors = require('cors');
 const assert = require('./assert');
 const { PRE_OFFER_ANSWER } = require('./constants');
 
 const PORT = process.env.PORT || 3030;
 
 const app = express();
+
+app.use(cors());
+app.use(express.static('public'));
+
 const server = http.createServer(app);
 const io = require('socket.io')(server);
-
-app.use(express.static('public'));
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(process.cwd(), 'public/index.html'));
@@ -24,7 +27,13 @@ io.on('connection', (socket) => {
   console.log('connectedPeers', connectedPeers);
 
   socket.on('pre-offer', (data) => {
-    console.log('pre-offer:', data);
+    console.log('pre-offer from', socket.id, data);
+
+    if (socket.id === data.calleePersonalCode) {
+      // @FIXME: Why the hell that event is comming
+      // Why it's triggered on the page which should only accept events, not send it
+      return;
+    }
 
     if (!connectedPeers.has(data.calleePersonalCode)) {
       io.to(socket.id).emit('pre-offer-answer', {
@@ -47,6 +56,7 @@ io.on('connection', (socket) => {
   socket.on('pre-offer-answer', (data) => {
     assert.isString(data.preOfferAnswer, 'data.preOfferAnswer should be a string: ' + data.preOfferAnswer);
     assert.isString(data.callerSocketId, 'data.callerSocketId should be a string' + data.callerSocketId);
+    assert.isFalse(socket.id === data.callerSocketId, 'pre-offer-answer should not came to server from callerSocketId');
 
     console.log('pre-offer-answer received:', data);
 

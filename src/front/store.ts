@@ -1,4 +1,4 @@
-import { assert } from "./assert.js";
+import { assert } from "./assert";
 
 let state = {
   socketId: null,
@@ -32,12 +32,12 @@ export const setLocalStream = (stream) => {
   };
 };
 
-export const setAllowConnectionFromStrangers = (allowConnections) => {
-  assert.isBoolean(allowConnections, 'allowConnections should be boolean');
+export const setAllowConnectionFromStrangers = (allowConnectionsFromStrangers) => {
+  assert.isBoolean(allowConnectionsFromStrangers, 'allowConnections should be boolean');
 
   state = {
     ...state,
-    allowConnections,
+    allowConnectionsFromStrangers,
   };
 };
 

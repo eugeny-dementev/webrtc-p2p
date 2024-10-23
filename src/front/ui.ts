@@ -1,7 +1,7 @@
-import { assert } from "./assert.js";
-import { CALL_TYPE, CALL_TYPE_TO_INFO, PRE_OFFER_ANSWER } from "./constants.js";
-import * as elements from './elements.js';
-import * as store from "./store.js";
+import { assert } from "./assert";
+import { CALL_TYPE, CALL_TYPE_TO_INFO, PRE_OFFER_ANSWER } from "./constants";
+import * as elements from './elements';
+import * as store from "./store";
 
 export function updatePersonalCode(code) {
   assert.isString(code, 'code should be a string');
@@ -20,7 +20,9 @@ export function registerCopyCodeButtonHandler() {
 
     assert.isString(code, 'copied code should be a string');
 
-    navigator.clipboard && navigator.clipboard.writeText(code);
+    if (document.hasFocus()) {
+      navigator.clipboard && navigator.clipboard.writeText(code);
+    }
   });
 }
 
@@ -35,7 +37,9 @@ export function registerPersonalVideoButtonHandler(listener) {
 }
 
 export function getCalleePersonalCode() {
-  const input = document.getElementById('personal_code_input');
+  const input = document.getElementById('personal_code_input') as HTMLInputElement;
+
+  console.log('getCalleePersonalCode', input.value);
 
   return input.value;
 }

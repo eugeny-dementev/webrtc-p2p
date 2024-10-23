@@ -1,7 +1,11 @@
-import { assert } from './assert.js';
-import { CALL_TYPE } from './constants.js';
+import { assert } from './assert';
+import { CALL_TYPE } from './constants';
 
-export const socket = io('/');
+//@ts-ignore
+export const socket = io('http://localhost:3030', {
+  transports: ['websocket', 'polling'],
+  upgrade: true,
+});
 
 export function subscribeToSocketEvent(event, listener) {
   assert.isString(event, 'event should be a string');
@@ -19,6 +23,8 @@ export function subscribeToSocketEvent(event, listener) {
 export function sendPreOffer(data) {
   assert.oneOf(data.callType, Object.values(CALL_TYPE));
   assert.isString(data.calleePersonalCode, 'data.calleePersonalCode should be a string');
+
+  console.log('Emitting pre-offer from', socket.id, data);
 
   socket.emit('pre-offer', data);
 }
