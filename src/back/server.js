@@ -27,7 +27,9 @@ io.on('connection', (socket) => {
   console.log('connectedPeers', connectedPeers);
 
   socket.on('pre-offer', (data) => {
-    console.log('pre-offer:', data);
+    console.log('pre-offer from', socket.id, data);
+
+    assert.isFalse(socket.id === data.calleePersonalCode, 'pre-offer should not come from calleePersonalCode')
 
     if (!connectedPeers.has(data.calleePersonalCode)) {
       io.to(socket.id).emit('pre-offer-answer', {
@@ -50,6 +52,7 @@ io.on('connection', (socket) => {
   socket.on('pre-offer-answer', (data) => {
     assert.isString(data.preOfferAnswer, 'data.preOfferAnswer should be a string: ' + data.preOfferAnswer);
     assert.isString(data.callerSocketId, 'data.callerSocketId should be a string' + data.callerSocketId);
+    assert.isFalse(socket.id === data.callerSocketId, 'pre-offer-answer should not came to server from callerSocketId');
 
     console.log('pre-offer-answer received:', data);
 

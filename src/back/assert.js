@@ -35,6 +35,11 @@ module.exports = {
     if (value instanceof klass) {
       return;
     }
+  },
+  isFalse(value, message) {
+    if (value === false) {
+      return
+    }
 
     throw new TypeError(message);
   },
