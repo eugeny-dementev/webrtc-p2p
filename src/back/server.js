@@ -30,6 +30,8 @@ io.on('connection', (socket) => {
     console.log('pre-offer from', socket.id, data);
 
     if (socket.id === data.calleePersonalCode) {
+      // @FIXME: Why the hell that event is comming
+      // Why it's triggered on the page which should only accept events, not send it
       return;
     }
 
