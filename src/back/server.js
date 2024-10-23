@@ -29,7 +29,9 @@ io.on('connection', (socket) => {
   socket.on('pre-offer', (data) => {
     console.log('pre-offer from', socket.id, data);
 
-    assert.isFalse(socket.id === data.calleePersonalCode, 'pre-offer should not come from calleePersonalCode')
+    if (socket.id === data.calleePersonalCode) {
+      return;
+    }
 
     if (!connectedPeers.has(data.calleePersonalCode)) {
       io.to(socket.id).emit('pre-offer-answer', {

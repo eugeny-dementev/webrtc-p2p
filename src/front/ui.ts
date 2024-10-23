@@ -39,6 +39,8 @@ export function registerPersonalVideoButtonHandler(listener) {
 export function getCalleePersonalCode() {
   const input = document.getElementById('personal_code_input') as HTMLInputElement;
 
+  console.log('getCalleePersonalCode', input.value);
+
   return input.value;
 }
 

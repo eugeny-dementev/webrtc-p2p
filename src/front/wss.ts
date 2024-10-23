@@ -24,6 +24,8 @@ export function sendPreOffer(data) {
   assert.oneOf(data.callType, Object.values(CALL_TYPE));
   assert.isString(data.calleePersonalCode, 'data.calleePersonalCode should be a string');
 
+  console.log('Emitting pre-offer from', socket.id, data);
+
   socket.emit('pre-offer', data);
 }
 
