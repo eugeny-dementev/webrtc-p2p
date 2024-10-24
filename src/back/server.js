@@ -27,13 +27,11 @@ io.on('connection', (socket) => {
   console.log('connectedPeers', connectedPeers);
 
   socket.on('pre-offer', (data) => {
-    console.log('pre-offer from', socket.id, data);
+    assert.isString(data.callType, 'data.preOfferAnswer should be a string: ' + data.preOfferAnswer);
+    assert.isString(data.calleePersonalCode, 'data.callerSocketId should be a string' + data.callerSocketId);
+    assert.isFalse(socket.id === data.calleePersonalCode, 'Socket.id should never be equal to data.calleePersonalCode');
 
-    if (socket.id === data.calleePersonalCode) {
-      // @FIXME: Why the hell that event is comming
-      // Why it's triggered on the page which should only accept events, not send it
-      return;
-    }
+    console.log('pre-offer from', socket.id, data);
 
     if (!connectedPeers.has(data.calleePersonalCode)) {
       io.to(socket.id).emit('pre-offer-answer', {
