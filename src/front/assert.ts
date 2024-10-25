@@ -1,4 +1,12 @@
 export const assert = {
+  is<T>(value: T, reference: T, message: string): boolean {
+    if (value === reference) {
+      return true;
+    }
+
+    throw new TypeError(message);
+  },
+
   isString(value, message) {
     if (typeof value === 'string') {
       return;
