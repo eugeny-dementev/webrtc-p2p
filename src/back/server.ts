@@ -1,9 +1,9 @@
-const express = require('express');
-const http = require('http');
-const path = require('path');
-const cors = require('cors');
-const assert = require('./assert');
-const { PRE_OFFER_ANSWER } = require('./constants');
+import express from 'express';
+import http from 'http';
+import path from 'path';
+import cors from 'cors';
+import { assert } from './assert';
+import { PRE_OFFER_ANSWER } from './constants';
 
 const PORT = process.env.PORT || 3030;
 

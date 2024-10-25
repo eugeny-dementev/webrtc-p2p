@@ -1,4 +1,4 @@
-module.exports = {
+export const assert = {
   isString(value, message) {
     if (typeof value === 'string') {
       return;
