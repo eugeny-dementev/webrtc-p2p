@@ -1,5 +1,6 @@
 import { CALL_TYPE, PRE_OFFER_ANSWER } from "../common/constants";
 import { assert } from "./assert";
+import { assert } from "../common/assert";
 import * as ui from './ui';
 import * as wss from './wss';
 

@@ -1,6 +1,7 @@
 import { CALL_TYPE } from '../common/constants';
 import { event } from '../common/helpers';
 import { assert } from './assert';
+import { assert } from '../common/assert';
 
 //@ts-ignore
 export const socket = io('http://localhost:3030', {

@@ -1,5 +1,5 @@
 import { CALL_TYPE, CALL_TYPE_TO_INFO, PRE_OFFER_ANSWER } from "../common/constants";
-import { assert } from "./assert";
+import { assert } from "../common/assert";
 import * as elements from './elements';
 import * as store from "./store";
 

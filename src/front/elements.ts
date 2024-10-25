@@ -1,5 +1,5 @@
 import { CALL_INFO } from "../common/constants";
-import { assert } from "./assert";
+import { assert } from "../common/assert";
 
 export function getIncomingCallDialog(callTypeInfo, acceptCallHandler, rejectCallHandler) {
   assert.oneOf(callTypeInfo, Object.values(CALL_INFO));

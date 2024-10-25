@@ -1,4 +1,4 @@
-import { assert } from "./assert";
+import { assert } from "../common/assert";
 
 let state = {
   socketId: null,
