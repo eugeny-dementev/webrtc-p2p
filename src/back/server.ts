@@ -2,10 +2,10 @@ import cors from 'cors';
 import express from 'express';
 import http from 'http';
 import path from 'path';
-import { event } from '../common/helpers';
-import { assert } from './assert';
 import { assert } from '../common/assert';
-import { PRE_OFFER_ANSWER } from './constants';
+import { PRE_OFFER_ANSWER } from '../common/constants';
+import { event } from '../common/helpers';
+import { CalleePreAnswer, CalleePreOffer } from '../common/types';
 
 const PORT = process.env.PORT || 3030;
 
@@ -43,17 +43,18 @@ io.on('connection', (socket) => {
       return;
     }
 
-    const calleePayload = {
+    const calleePayload: CalleePreOffer = {
       callerSocketId: socket.id,
       callType: data.callType,
-      side: data.side,
+      from: 'back',
+      to: 'front',
     };
 
     console.log('sending offer to callee:', calleePayload);
     io.to(data.calleePersonalCode).emit(event('pre-offer').from('back').to('front'), calleePayload);
   });
 
-  socket.on(event('pre-offer-answer').from('front').to('back'), (data) => {
+  socket.on(event('pre-offer-answer').from('front').to('back'), (data: CalleePreAnswer) => {
     assert.isString(data.preOfferAnswer, 'data.preOfferAnswer should be a string: ' + data.preOfferAnswer);
     assert.isString(data.callerSocketId, 'data.callerSocketId should be a string' + data.callerSocketId);
     assert.isFalse(socket.id === data.callerSocketId, 'pre-offer-answer should not came to server from callerSocketId');
@@ -64,6 +65,9 @@ io.on('connection', (socket) => {
       console.log('Caller not found', data.callerSocketId);
       return;
     }
+
+    data.from = 'back';
+    data.to = 'front';
 
     io.to(data.callerSocketId).emit(event('pre-offer-answer').from('back').to('front'), data);
   });

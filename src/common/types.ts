@@ -21,6 +21,3 @@ export interface CalleePreAnswer {
   to: 'front' | 'back',
 }
 
-export interface CallerPreAnswer {
-}
-

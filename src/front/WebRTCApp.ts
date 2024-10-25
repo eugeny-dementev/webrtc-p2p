@@ -1,6 +1,7 @@
 import { injectable } from 'inversify';
 import { CALL_TYPE } from '../common/constants';
 import { event } from '../common/helpers';
+import { CalleePreOffer, CallerPreOffer } from '../common/types';
 import * as store from './store';
 import * as ui from './ui';
 import * as webRTCHandler from './webRTCHandler';
@@ -16,10 +17,10 @@ export class WebRTCApp {
       store.setSocketId(wss.socket.id);
       ui.updatePersonalCode(wss.socket.id);
     });
-    wss.subscribeToSocketEvent(event('pre-offer').from('back').to('front'), (data) => {
+    wss.subscribeToSocketEvent(event('pre-offer').from('back').to('front'), (data: CalleePreOffer) => {
       webRTCHandler.handlePreOffer(data)
     });
-    wss.subscribeToSocketEvent('pre-offer-answer', (data) => {
+    wss.subscribeToSocketEvent(event('pre-offer-answer').from('back').to('front'), (data) => {
       webRTCHandler.handlePreOfferAnswer(data);
     });
 
