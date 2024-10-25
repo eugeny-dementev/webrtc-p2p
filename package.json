@@ -6,6 +6,7 @@
   "scripts": {
     "dev:frontend": "webpack serve -c webpack/webpack.config.dev.ts --mode=development",
     "dev:backend": "nodemon ./src/back/server.js",
+    "typecheck": "tsc --noEmit",
     "test": "exit 0"
   },
   "keywords": [
