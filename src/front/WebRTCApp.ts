@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
 import { CALL_TYPE } from '../common/constants';
 import { event } from '../common/helpers';
-import { CalleePreOffer, CallerPreOffer } from '../common/types';
+import { CalleePreOffer } from '../common/types';
 import * as store from './store';
 import * as ui from './ui';
 import * as webRTCHandler from './webRTCHandler';
