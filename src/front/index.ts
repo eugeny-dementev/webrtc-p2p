@@ -3,8 +3,8 @@ import "./default.css";
 import "./styles.css";
 
 import { container } from "./di";
-import { WebRTCApp } from "./WebRTCApp";
 import { TOKEN } from "./tokens";
+import { WebRTCApp } from "./WebRTCApp";
 
 const app = container.get<WebRTCApp>(TOKEN.WebRTCApp);
 

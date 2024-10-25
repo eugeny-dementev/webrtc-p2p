@@ -1,5 +1,6 @@
+import { CALL_TYPE } from '../common/constants';
+import { event } from '../common/helpers';
 import { assert } from './assert';
-import { CALL_TYPE } from './constants';
 
 //@ts-ignore
 export const socket = io('http://localhost:3030', {
@@ -26,12 +27,12 @@ export function sendPreOffer(data) {
 
   console.log('Emitting pre-offer from', socket.id, data);
 
-  socket.emit('pre-offer', data);
+  socket.emit(event('pre-offer').from('front').to('back'), data);
 }
 
 export function sendPreOfferAnswer(data) {
   assert.isString(data.preOfferAnswer, 'data.preOfferAnswer should be a string');
   assert.isString(data.callerSocketId, 'data.callerSocketId should be a string');
 
-  socket.emit('pre-offer-answer', data);
+  socket.emit(event('pre-offer-answer').from('front').to('back'), data);
 }

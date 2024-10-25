@@ -1,7 +1,8 @@
+import cors from 'cors';
 import express from 'express';
 import http from 'http';
 import path from 'path';
-import cors from 'cors';
+import { event } from '../common/helpers';
 import { assert } from './assert';
 import { PRE_OFFER_ANSWER } from './constants';
 
@@ -26,7 +27,7 @@ io.on('connection', (socket) => {
   console.log('user connected to Socket.IO server', socket.id);
   console.log('connectedPeers', connectedPeers);
 
-  socket.on('pre-offer', (data) => {
+  socket.on(event('pre-offer').from('front').to('back'), (data) => {
     assert.isString(data.callType, 'data.preOfferAnswer should be a string: ' + data.preOfferAnswer);
     assert.isString(data.calleePersonalCode, 'data.callerSocketId should be a string' + data.callerSocketId);
     assert.isFalse(socket.id === data.calleePersonalCode, 'Socket.id should never be equal to data.calleePersonalCode');
@@ -48,10 +49,10 @@ io.on('connection', (socket) => {
     };
 
     console.log('sending offer to callee:', calleePayload);
-    io.to(data.calleePersonalCode).emit('pre-offer', calleePayload);
+    io.to(data.calleePersonalCode).emit(event('pre-offer').from('back').to('front'), calleePayload);
   });
 
-  socket.on('pre-offer-answer', (data) => {
+  socket.on(event('pre-offer-answer').from('front').to('back'), (data) => {
     assert.isString(data.preOfferAnswer, 'data.preOfferAnswer should be a string: ' + data.preOfferAnswer);
     assert.isString(data.callerSocketId, 'data.callerSocketId should be a string' + data.callerSocketId);
     assert.isFalse(socket.id === data.callerSocketId, 'pre-offer-answer should not came to server from callerSocketId');
@@ -63,7 +64,7 @@ io.on('connection', (socket) => {
       return;
     }
 
-    io.to(data.callerSocketId).emit('pre-offer-answer', data);
+    io.to(data.callerSocketId).emit(event('pre-offer-answer').from('back').to('front'), data);
   });
 
   socket.on('disconnect', () => {

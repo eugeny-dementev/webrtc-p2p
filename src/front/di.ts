@@ -1,6 +1,6 @@
 import { Container } from "inversify";
-import { WebRTCApp } from "./WebRTCApp";
 import { TOKEN } from "./tokens";
+import { WebRTCApp } from "./WebRTCApp";
 
 export const container = new Container();
 

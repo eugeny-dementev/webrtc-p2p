@@ -1,4 +1,4 @@
-import { CALL_INFO } from "./constants";
+import { CALL_INFO } from "../common/constants";
 import { assert } from "./assert";
 
 export function getIncomingCallDialog(callTypeInfo, acceptCallHandler, rejectCallHandler) {
