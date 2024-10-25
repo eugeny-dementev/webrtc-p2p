@@ -7,7 +7,7 @@ export const baseDirectory = "src";
 export const config: Configuration = {
   mode: "development",
   entry: {
-    main: [`./${baseDirectory}/index.ts`],
+    main: [`./${baseDirectory}/front/index.ts`],
   },
   output: {
     path: path.resolve(__dirname, "../dist"),

@@ -30,3 +30,7 @@ export function initialize() {
     webRTCHandler.sendPreOffer(code, CALL_TYPE.PersonalCall);
   });
 }
+
+export class WebRTCApp {
+
+}
