@@ -46,4 +46,12 @@ export const assert = {
 
     throw new TypeError(message);
   },
+
+  isFalse(value, message) {
+    if (value === false) {
+      return
+    }
+
+    throw new TypeError(message);
+  },
 };

@@ -4,6 +4,7 @@ import http from 'http';
 import path from 'path';
 import { event } from '../common/helpers';
 import { assert } from './assert';
+import { assert } from '../common/assert';
 import { PRE_OFFER_ANSWER } from './constants';
 
 const PORT = process.env.PORT || 3030;
