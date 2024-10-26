@@ -1,8 +1,14 @@
 import { Container } from "inversify";
+import { Store } from "./store";
 import { TOKEN } from "./tokens";
 import { WebRTCApp } from "./WebRTCApp";
 
 export const container = new Container();
+
+container
+  .bind<Store>(TOKEN.Store)
+  .to(Store)
+  .inSingletonScope();
 
 container
   .bind<WebRTCApp>(TOKEN.WebRTCApp)
