@@ -1,72 +1,77 @@
+import { injectable } from "inversify";
 import { assert } from "../common/assert";
 
-let state = {
-  socketId: null,
+type State = {
+  socketId: string;
 
-  localStream: null,
-  remoteStream: null,
+  localStream: MediaStream | null;
+  remoteStream: MediaStream | null;
 
-  screenSharingStream: null,
-  screenSharingActive: false,
+  screenSharingStream: MediaStream | null;
+  screenSharingActive: boolean;
 
-  allowConnectionsFromStrangers: false,
+  allowConnectionsFromStrangers: boolean;
 
   // callState: ?
-};
-
-export const setSocketId = (socketId) => {
-  assert.isString(socketId, 'socketId should be string');
-
-  state = {
-    ...state,
-    socketId,
-  };
 }
 
-export const setLocalStream = (stream) => {
-  assert.isInstanceOf(stream, MediaStream, "local stream should be instance of MediaStream");
+@injectable()
+export class Store {
+  private state: State = Object.freeze({
+    socketId: null,
 
-  state = {
-    ...state,
-    localStream: stream,
-  };
-};
+    localStream: null,
+    remoteStream: null,
 
-export const setAllowConnectionFromStrangers = (allowConnectionsFromStrangers) => {
-  assert.isBoolean(allowConnectionsFromStrangers, 'allowConnections should be boolean');
+    screenSharingStream: null,
+    screenSharingActive: false,
 
-  state = {
-    ...state,
-    allowConnectionsFromStrangers,
-  };
-};
+    allowConnectionsFromStrangers: false,
 
-export const setScreenSharingActive = (screenSharingActive) => {
-  assert.isBoolean(screenSharingActive, 'screenSharingActive should be boolean');
+    // callState: ?
+  });
 
-  state = {
-    ...state,
-    screenSharingActive,
-  };
-};
+  // Connection
+  set socketId(value: string) {
+    assert.isString(value, 'socketId should be string');
 
-export const setScreenSharingStream = (stream) => {
-  assert.isInstanceOf(stream, MediaStream, "screen sharing stream should be instance of MediaStream");
+    this.state = Object.freeze({ ...this.state, socketId: value })
+  }
+  get socketId(): string {
+    return this.state.socketId;
+  }
 
-  state = {
-    ...state,
-    screenSharingStream: stream,
-  };
-};
+  // Streams
+  set localStream(value: State['localStream']) {
+    this.state = Object.freeze({ ...this.state, localStream: value, });
+  }
+  get localStream(): State['localStream'] {
+    return this.state.localStream;
+  }
+  set remoteStream(value: State['localStream']) {
+    this.state = Object.freeze({ ...this.state, remoteStream: value, });
+  }
+  get remoteStream(): State['localStream'] {
+    return this.state.remoteStream;
+  }
+  set screenSharingStream(value: State['localStream']) {
+    this.state = Object.freeze({ ...this.state, screenSharingStream: value, });
+  }
+  get screenSharingStream(): State['localStream'] {
+    return this.state.screenSharingStream;
+  }
 
-
-export const setRemoteStream = (stream) => {
-  assert.isInstanceOf(stream, MediaStream, "remote stream should be instance of MediaStream");
-
-  state = {
-    ...state,
-    remoteStream: stream,
-  };
-};
-
-export const getState = () => state
+  // Flags
+  set screenSharingActive(value: boolean) {
+    this.state = Object.freeze({ ...this.state, screenSharingActive: value, });
+  }
+  get screenSharingActive(): boolean {
+    return this.state.screenSharingActive;
+  }
+  set allowConnectionsFromStrangers(value: boolean) {
+    this.state = Object.freeze({ ...this.state, allowConnectionsFromStrangers: value, });
+  }
+  get allowConnectionsFromStrangers(): boolean {
+    return this.state.allowConnectionsFromStrangers;
+  }
+}
