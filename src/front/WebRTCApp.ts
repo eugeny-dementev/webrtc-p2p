@@ -1,20 +1,21 @@
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 import { CALL_TYPE } from '../common/constants';
 import { event } from '../common/helpers';
 import { CalleePreOffer } from '../common/types';
-import * as store from './store';
+import { Store } from './store';
+import { TOKEN } from './tokens';
 import * as ui from './ui';
 import * as webRTCHandler from './webRTCHandler';
 import * as wss from './wss';
 
 @injectable()
 export class WebRTCApp {
-  constructor() { }
+  constructor(@inject(TOKEN.Store) private readonly store: Store) { }
 
   start() {
     wss.subscribeToSocketEvent('connect', () => {
       console.log('success connection to socket.io server with id:', wss.socket.id);
-      store.setSocketId(wss.socket.id);
+      this.store.socketId = wss.socket.id;
       ui.updatePersonalCode(wss.socket.id);
     });
     wss.subscribeToSocketEvent(event('pre-offer').from('back').to('front'), (data: CalleePreOffer) => {
