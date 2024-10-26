@@ -33,6 +33,9 @@ export class UI {
 
     return input.value;
   }
+
+  showDialog(dialog){
+  }
 }
 
 export function showIncomingCallingDialog(callType, acceptCallHandler, rejectCallHandler) {

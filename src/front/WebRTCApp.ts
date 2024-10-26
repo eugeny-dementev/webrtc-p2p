@@ -16,16 +16,17 @@ export class WebRTCApp {
     @inject(TOKEN.UI) private readonly ui: UI,
   ) { }
 
-  start() {
-    wss.subscribeToSocketEvent('connect', () => {
-      console.log('success connection to socket.io server with id:', wss.socket.id);
-      this.store.socketId = wss.socket.id;
+  async start() {
+    const socket = await wss.getSocketConnection();
+    wss.subscribeToSocketEvent(socket, 'connect', () => {
+      console.log('success connection to socket.io server with id:', socket.id);
+      this.store.socketId = socket.id;
       this.ui.updatePersonalCode();
     });
-    wss.subscribeToSocketEvent(event('pre-offer').from('back').to('front'), (data: CalleePreOffer) => {
+    wss.subscribeToSocketEvent(socket, event('pre-offer').from('back').to('front'), (data: CalleePreOffer) => {
       webRTCHandler.handlePreOffer(data)
     });
-    wss.subscribeToSocketEvent(event('pre-offer-answer').from('back').to('front'), (data) => {
+    wss.subscribeToSocketEvent(socket, event('pre-offer-answer').from('back').to('front'), (data) => {
       webRTCHandler.handlePreOfferAnswer(data);
     });
 

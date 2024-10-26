@@ -8,4 +8,4 @@ import { WebRTCApp } from "./WebRTCApp";
 
 const app = container.get<WebRTCApp>(TOKEN.WebRTCApp);
 
-app.start();
+app.start().catch(console.error);

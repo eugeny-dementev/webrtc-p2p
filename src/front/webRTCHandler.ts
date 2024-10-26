@@ -25,7 +25,9 @@ export function sendPreOffer(calleePersonalCode: string, callType: CALL_TYPE) {
 
     ui.showCallingDialog(cancelCallHandler);
 
-    wss.sendPreOffer(data);
+    wss.getSocketConnection().then(socket => {
+      wss.sendPreOffer(socket, data);
+    })
   }
 }
 
@@ -78,7 +80,9 @@ function sendPreOfferAnswer(preOfferAnswer: PRE_OFFER_ANSWER) {
   };
 
   ui.removeAllDialogs();
-  wss.sendPreOfferAnswer(data);
+  wss.getSocketConnection().then(socket => {
+    wss.sendPreOfferAnswer(socket, data);
+  });
 }
 
 export function handlePreOfferAnswer(data: CalleePreAnswer) {

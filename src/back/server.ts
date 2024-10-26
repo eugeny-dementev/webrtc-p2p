@@ -15,7 +15,7 @@ app.use(cors());
 app.use(express.static('public'));
 
 const server = http.createServer(app);
-const io = require('socket.io')(server);
+const io = require('socket.io')(server, { cors: true });
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(process.cwd(), 'public/index.html'));
