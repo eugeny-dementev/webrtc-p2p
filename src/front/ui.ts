@@ -42,7 +42,12 @@ export function showIncomingCallingDialog(callType, acceptCallHandler, rejectCal
 
   const callTypeInfo = CALL_TYPE_TO_INFO[callType];
 
-  const incomingCallDialog = elements.getIncomingCallDialog(callTypeInfo, acceptCallHandler, rejectCallHandler);
+  const incomingCallDialog = new elements.Dialog()
+    .setTitle(`Incoming ${callTypeInfo} Call`)
+    .addButton('accept', acceptCallHandler)
+    .addButton('reject', rejectCallHandler)
+    .appendButtons()
+    .getElement();
 
   const dialogHTML = document.getElementById('dialog');
   dialogHTML.innerHTML = '';
@@ -52,7 +57,11 @@ export function showIncomingCallingDialog(callType, acceptCallHandler, rejectCal
 export function showCallingDialog(cancelCallHandler) {
   assert.isFunction(cancelCallHandler, 'cancelCallHandler should be a function');
 
-  const callDialog = elements.getCallingDialog(cancelCallHandler);
+  const callDialog = new elements.Dialog()
+    .setTitle('Calling')
+    .addButton('reject', cancelCallHandler)
+    .appendButtons()
+    .getElement();
 
   const dialogHTML = document.getElementById('dialog');
   dialogHTML.innerHTML = '';
@@ -67,40 +76,41 @@ export function removeAllDialogs() {
 export function showInfoDialog(preOfferAnswer) {
   assert.oneOf(preOfferAnswer, Object.values(PRE_OFFER_ANSWER));
 
-  let infoDialog = null;
+  let infoDialog = new elements.Dialog();
+  let showDialog = false;
 
   switch (preOfferAnswer) {
     case PRE_OFFER_ANSWER.CALL_REJECTED: {
-      infoDialog = elements.getInfoDialog(
-        'Call rejected',
-        'Callee rejected your call',
-      );
+      infoDialog
+        .setTitle('Call rejected')
+        .setDescription('Callee rejected your call')
+      showDialog = true
 
       break;
     }
     case PRE_OFFER_ANSWER.CALLEE_NOT_FOUND: {
-      infoDialog = elements.getInfoDialog(
-        'Call not found',
-        'Please check provided personal code',
-      );
+      infoDialog
+        .setTitle('Call not found')
+        .setDescription('Please check provided personal code')
+      showDialog = true
 
       break;
     }
     case PRE_OFFER_ANSWER.CALLEE_UNAVAILABLE: {
-      infoDialog = elements.getInfoDialog(
-        'Call is not possible',
-        'Probably callee is busy. Please try again later',
-      );
+      infoDialog
+        .setTitle('Call is not possible')
+        .setDescription('Probably callee is busy. Please try again later')
+      showDialog = true
 
       break;
     }
     default: throw new TypeError('Unexpected preOfferAnswer ' + preOfferAnswer);
   }
 
-  if (infoDialog) {
+  if (showDialog) {
     const dialogHTML = document.getElementById('dialog');
     dialogHTML.innerHTML = '';
-    dialogHTML.appendChild(infoDialog);
+    dialogHTML.appendChild(infoDialog.getElement());
 
     setTimeout(() => {
       removeAllDialogs()
