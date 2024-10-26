@@ -1,50 +1,38 @@
-import { CALL_TYPE, CALL_TYPE_TO_INFO, PRE_OFFER_ANSWER } from "../common/constants";
+import { inject, injectable } from "inversify";
 import { assert } from "../common/assert";
+import { CALL_TYPE, CALL_TYPE_TO_INFO, PRE_OFFER_ANSWER } from "../common/constants";
 import * as elements from './elements';
-import { container } from "./di";
 import { Store } from "./store";
 import { TOKEN } from "./tokens";
 
-export function updatePersonalCode(code) {
-  assert.isString(code, 'code should be a string');
+@injectable()
+export class UI {
+  constructor(@inject(TOKEN.Store) private readonly store: Store) { }
 
-  const personalCodeParagraph = document.getElementById('personal_code_paragraph');
+  updatePersonalCode() {
+    const personalCodeParagraph = document.getElementById('personal_code_paragraph');
+    assert.isInstanceOf(personalCodeParagraph, HTMLElement, 'div.personal_code_paragraph must exist');
 
-  personalCodeParagraph.innerHTML = code;
-}
+    personalCodeParagraph.innerHTML = this.store.socketId;
+  }
 
-export function registerCopyCodeButtonHandler() {
-  const personalCodeCopyButton = document.getElementById('personal_code_copy_button');
+  registerButtonHandler(id: HTMLElement['id'], listener: HTMLElement['onclick']) {
+    assert.isString(id, '"id" should be provided as a string');
+    assert.isFalse(id.length === 0, '"id" should be non-empty string');
+    const element = document.getElementById(id);
+    assert.isInstanceOf(element, HTMLElement, `div[#${id}] element must exist`);
 
-  personalCodeCopyButton.addEventListener('click', () => {
-    const store = container.get<Store>(TOKEN.Store);
+    element.addEventListener('click', listener);
+  }
 
-    const code = store.socketId;
+  getInputValue(id: HTMLInputElement['id']): string {
+    assert.isString(id, '"id" should be provided as a string');
+    assert.isFalse(id.length === 0, '"id" should be non-empty string');
+    const input = document.getElementById(id) as HTMLInputElement;
+    assert.isInstanceOf(input, HTMLInputElement, `input[#${id}] element must exist`);
 
-    assert.isString(code, 'copied code should be a string');
-
-    if (document.hasFocus()) {
-      navigator.clipboard && navigator.clipboard.writeText(code);
-    }
-  });
-}
-
-const personalCodeChatButton = document.getElementById('personal_code_chat_button');
-export function registerPersonalChatButtonHandler(listener) {
-  personalCodeChatButton.addEventListener('click', listener);
-}
-
-const personalCodeVideoButton = document.getElementById('personal_code_video_button');
-export function registerPersonalVideoButtonHandler(listener) {
-  personalCodeVideoButton.addEventListener('click', listener);
-}
-
-export function getCalleePersonalCode() {
-  const input = document.getElementById('personal_code_input') as HTMLInputElement;
-
-  console.log('getCalleePersonalCode', input.value);
-
-  return input.value;
+    return input.value;
+  }
 }
 
 export function showIncomingCallingDialog(callType, acceptCallHandler, rejectCallHandler) {
