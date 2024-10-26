@@ -14,6 +14,7 @@ export async function getSocketConnection(retries = 50, interval = 1000): Promis
   }
 
   async function loadSocketIOScript() {
+    // <script src="http://localhost:3030/socket.io/socket.io.js"></script>
     const src = 'http://localhost:3030/socket.io/socket.io.js'
     try {
       const response = await fetch(src, { method: 'HEAD' });
@@ -24,7 +25,6 @@ export async function getSocketConnection(retries = 50, interval = 1000): Promis
       throw new Error('Failed to fetch script ' + src);
     }
 
-    // <script src="/socket.io/socket.io.js"></script>
     return new Promise<void>((resolve, reject) => {
       const existingScript = document.getElementById('socket-io-script');
       if (existingScript) {
