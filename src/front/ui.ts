@@ -1,7 +1,9 @@
 import { CALL_TYPE, CALL_TYPE_TO_INFO, PRE_OFFER_ANSWER } from "../common/constants";
 import { assert } from "../common/assert";
 import * as elements from './elements';
-import * as store from "./store";
+import { container } from "./di";
+import { Store } from "./store";
+import { TOKEN } from "./tokens";
 
 export function updatePersonalCode(code) {
   assert.isString(code, 'code should be a string');
@@ -15,8 +17,9 @@ export function registerCopyCodeButtonHandler() {
   const personalCodeCopyButton = document.getElementById('personal_code_copy_button');
 
   personalCodeCopyButton.addEventListener('click', () => {
-    const state = store.getState();
-    const code = state.socketId;
+    const store = container.get<Store>(TOKEN.Store);
+
+    const code = store.socketId;
 
     assert.isString(code, 'copied code should be a string');
 
