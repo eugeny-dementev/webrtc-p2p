@@ -1,5 +1,6 @@
 import { Container } from "inversify";
 import { io, Socket } from "socket.io-client";
+import { CalleeEventsHandler } from "./CalleeEventsHandler";
 import { CalleeSignaling } from "./CalleeSignaling";
 import { CallerSignaling } from "./CallerSignaling";
 import { Store } from "./store";
@@ -36,6 +37,11 @@ container
   .bind<CalleeSignaling>(TOKEN.CalleeSignaling)
   .to(CalleeSignaling)
   .inSingletonScope()
+
+container
+  .bind<CalleeEventsHandler>(TOKEN.CalleeEventsHandler)
+  .to(CalleeEventsHandler)
+  .inSingletonScope();
 
 container
   .bind<WebRTCApp>(TOKEN.WebRTCApp)
