@@ -3,6 +3,7 @@ import { assert } from '../common/assert';
 import { CALL_TYPE } from '../common/constants';
 import { event } from '../common/helpers';
 import { CalleePreOffer } from '../common/types';
+import { SocketClient } from './SocketClient';
 import { Store } from './store';
 import { TOKEN } from './tokens';
 import { UI } from './ui';
@@ -13,6 +14,7 @@ import * as wss from './wss';
 export class WebRTCApp {
   constructor(
     @inject(TOKEN.Store) private readonly store: Store,
+    @inject(TOKEN.SocketClient) private readonly socket: SocketClient,
     @inject(TOKEN.UI) private readonly ui: UI,
   ) { }
 
