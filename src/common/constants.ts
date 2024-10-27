@@ -1,3 +1,6 @@
+import { BackToFront, FrontToBack } from "./types"
+import { event } from "./helpers";
+
 export enum CALL_TYPE {
   PersonalCall = 'personal_call',
   PersonalChat = 'personal_chat',
@@ -18,4 +21,21 @@ export enum PRE_OFFER_ANSWER {
   CALL_ACCEPTED = 'CALL_ACCEPTED',
   CALL_REJECTED = 'CALL_REJECTED',
   CALLEE_UNAVAILABLE = 'CALL_UNAVAILABLE',
+};
+
+export const frontToBack: FrontToBack = {
+  from: 'front',
+  to: 'back'
+}
+
+export const backToFront: BackToFront = {
+  from: 'back',
+  to: 'front'
+}
+
+export const SIGNALING_EVENT = {
+  PRE_OFFER_FROM_CALLER: event('pre-offer').from('front').to('back'),
+  PRE_OFFER_FOR_CALLEE: event('pre-offer').from('back').to('front'),
+  PRE_ANSWER_FROM_CALLEE: event('pre-offer-answer').from('front').to('back'),
+  PRE_ANSWER_FOR_CALLER: event('pre-offer-answer').from('back').to('front'),
 };
