@@ -21,6 +21,7 @@ export const config: Configuration = {
   },
   module: {
     rules: [
+      { test: /src\/back/, loader: 'ignore-loader' },
       { test: /\.tsx?$/, use: "ts-loader" },
       {
         test: /\.css$/i,
