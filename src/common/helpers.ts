@@ -25,3 +25,9 @@ export function getInvertedPromise<T>(): InvertedPromise<T> {
     reject,
   }
 }
+
+export function sleep(timeout: number) {
+  return new Promise((res) => {
+    setTimeout(res, timeout);
+  });
+}
