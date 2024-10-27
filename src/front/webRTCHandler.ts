@@ -1,6 +1,6 @@
 import { assert } from "../common/assert";
 import { CALL_TYPE, PRE_OFFER_ANSWER } from "../common/constants";
-import { CalleePreAnswer, CalleePreOffer, CallerPreOffer } from "../common/types";
+import { PreAnswerFromCallee, PreOfferForCallee, PreOfferFromCaller, PreAnswerForCaller } from "../common/types";
 import * as ui from './ui';
 import * as wss from './wss';
 
@@ -16,7 +16,7 @@ export function sendPreOffer(calleePersonalCode: string, callType: CALL_TYPE) {
   }
 
   if (callType === CALL_TYPE.PersonalChat || callType === CALL_TYPE.PersonalCall) {
-    const data: CallerPreOffer = {
+    const data: PreOfferFromCaller = {
       callType: callType,
       calleePersonalCode: calleePersonalCode,
       from: 'front',
@@ -36,7 +36,7 @@ export function sendPreOffer(calleePersonalCode: string, callType: CALL_TYPE) {
  * @param data.callType {string}
  * @param data.callerPersonalCode {string}
  */
-export function handlePreOffer(data: CalleePreOffer) {
+export function handlePreOffer(data: PreOfferForCallee) {
   assert.oneOf(data.callType, Object.values(CALL_TYPE));
   assert.isString(data.callerSocketId, 'data.callerSocketId should be a string');
   assert.is(data.from, 'back', 'handlePreOffer should always to receive events from the back');
@@ -72,7 +72,7 @@ function cancelCallHandler() {
 function sendPreOfferAnswer(preOfferAnswer: PRE_OFFER_ANSWER) {
   assert.oneOf(preOfferAnswer, Object.values(PRE_OFFER_ANSWER));
 
-  const data: CalleePreAnswer = {
+  const data: PreAnswerFromCallee = {
     callerSocketId: connectedUserDetails.socketId,
     preOfferAnswer,
     from: 'front',
@@ -85,7 +85,7 @@ function sendPreOfferAnswer(preOfferAnswer: PRE_OFFER_ANSWER) {
   });
 }
 
-export function handlePreOfferAnswer(data: CalleePreAnswer) {
+export function handlePreOfferAnswer(data: PreAnswerForCaller) {
   assert.oneOf(data.preOfferAnswer, Object.values(PRE_OFFER_ANSWER));
 
   switch (data.preOfferAnswer) {

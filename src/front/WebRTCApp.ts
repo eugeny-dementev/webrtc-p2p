@@ -3,7 +3,7 @@ import { Socket } from 'socket.io-client';
 import { assert } from '../common/assert';
 import { CALL_TYPE } from '../common/constants';
 import { event } from '../common/helpers';
-import { CalleePreOffer } from '../common/types';
+import { PreOfferForCallee } from '../common/types';
 import { Store } from './store';
 import { TOKEN } from './tokens';
 import { UI } from './ui';
@@ -28,7 +28,7 @@ export class WebRTCApp {
       this.store.socketId = socket.id;
       this.ui.updatePersonalCode();
     });
-    wss.subscribeToSocketEvent(socket, event('pre-offer').from('back').to('front'), (data: CalleePreOffer) => {
+    wss.subscribeToSocketEvent(socket, event('pre-offer').from('back').to('front'), (data: PreOfferForCallee) => {
       webRTCHandler.handlePreOffer(data)
     });
     wss.subscribeToSocketEvent(socket, event('pre-offer-answer').from('back').to('front'), (data) => {

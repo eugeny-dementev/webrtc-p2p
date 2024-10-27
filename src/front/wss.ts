@@ -2,7 +2,7 @@ import { Socket } from 'socket.io';
 import { assert } from '../common/assert';
 import { CALL_TYPE } from '../common/constants';
 import { event } from '../common/helpers';
-import { CalleePreAnswer, CallerPreOffer } from '../common/types';
+import { PreAnswerFromCallee, PreOfferFromCaller } from '../common/types';
 
 //@ts-ignore
 export let socketClient: Socket = undefined;
@@ -80,7 +80,7 @@ export function subscribeToSocketEvent(socket: Socket, event: string, listener: 
   });
 }
 
-export function sendPreOffer(socket: Socket, data: CallerPreOffer) {
+export function sendPreOffer(socket: Socket, data: PreOfferFromCaller) {
   assert.oneOf(data.callType, Object.values(CALL_TYPE));
   assert.isString(data.calleePersonalCode, 'data.calleePersonalCode should be a string');
   assert.is(data.from, 'front', 'Always from front to back');
@@ -92,7 +92,7 @@ export function sendPreOffer(socket: Socket, data: CallerPreOffer) {
   socket.emit(eventType, data);
 }
 
-export function sendPreOfferAnswer(socket: Socket, data: CalleePreAnswer) {
+export function sendPreOfferAnswer(socket: Socket, data: PreAnswerFromCallee) {
   assert.isString(data.preOfferAnswer, 'data.preOfferAnswer should be a string');
   assert.isString(data.callerSocketId, 'data.callerSocketId should be a string');
   assert.is(data.from, 'front', 'Always from front to back');
