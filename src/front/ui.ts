@@ -34,27 +34,38 @@ export class UI {
     return input.value;
   }
 
-  showDialog(dialog){
+  showIncomingCallingDialog(callType: CALL_TYPE, accept: () => void, reject: () => void) {
+    assert.oneOf(callType, Object.values(CALL_TYPE));
+
+    const callTypeInfo = CALL_TYPE_TO_INFO[callType];
+
+    const incomingCallDialog = new elements.Dialog()
+      .setTitle(`Incoming ${callTypeInfo} Call`)
+      .addButton('accept', accept)
+      .addButton('reject', reject)
+      .appendButtons()
+      .getElement();
+
+    const dialogHTML = document.getElementById('dialog');
+    dialogHTML.innerHTML = '';
+    dialogHTML.appendChild(incomingCallDialog);
   }
-}
 
-export function showIncomingCallingDialog(callType, acceptCallHandler, rejectCallHandler) {
-  assert.oneOf(callType, Object.values(CALL_TYPE));
-  assert.isFunction(acceptCallHandler, 'acceptCallHandler should be a function');
-  assert.isFunction(rejectCallHandler, 'rejectCallHandler should be a function');
+  showCallElements(callType: CALL_TYPE) {
+    assert.oneOf(callType, [CALL_TYPE.PersonalChat, CALL_TYPE.PersonalCall]);
 
-  const callTypeInfo = CALL_TYPE_TO_INFO[callType];
+    console.log('showCallElements(callType)', callType);
 
-  const incomingCallDialog = new elements.Dialog()
-    .setTitle(`Incoming ${callTypeInfo} Call`)
-    .addButton('accept', acceptCallHandler)
-    .addButton('reject', rejectCallHandler)
-    .appendButtons()
-    .getElement();
+    if (callType === CALL_TYPE.PersonalChat) {
+      showChatCallElements();
+    }
 
-  const dialogHTML = document.getElementById('dialog');
-  dialogHTML.innerHTML = '';
-  dialogHTML.appendChild(incomingCallDialog);
+    if (callType === CALL_TYPE.PersonalCall) {
+      showVideoCallElements();
+    }
+
+    removeAllDialogs();
+  }
 }
 
 export function showCallingDialog(cancelCallHandler) {
@@ -133,6 +144,8 @@ export function showCallElements(callType) {
   if (callType === CALL_TYPE.PersonalCall) {
     showVideoCallElements();
   }
+
+  removeAllDialogs();
 }
 
 export function showChatCallElements() {
