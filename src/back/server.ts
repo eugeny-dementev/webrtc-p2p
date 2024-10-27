@@ -5,7 +5,9 @@ import path from 'path';
 import { assert } from '../common/assert';
 import { PRE_OFFER_ANSWER } from '../common/constants';
 import { event } from '../common/helpers';
-import { CalleePreAnswer, CalleePreOffer } from '../common/types';
+import {
+  PreAnswerForCaller, PreAnswerFromCallee, PreOfferForCallee, PreOfferFromCaller
+} from '../common/types';
 
 const PORT = process.env.PORT || 3030;
 
@@ -27,9 +29,9 @@ io.on('connection', (socket) => {
   connectedPeers.add(socket.id);
   console.log('connectedPeers', connectedPeers);
 
-  socket.on(event('pre-offer').from('front').to('back'), (data) => {
-    assert.isString(data.callType, 'data.preOfferAnswer should be a string: ' + data.preOfferAnswer);
-    assert.isString(data.calleePersonalCode, 'data.callerSocketId should be a string' + data.callerSocketId);
+  socket.on(event('pre-offer').from('front').to('back'), (data: PreOfferFromCaller) => {
+    assert.isString(data.callType, 'data.preOfferAnswer should be a string: ' + data.callType);
+    assert.isString(data.calleePersonalCode, 'data.callerSocketId should be a string' + data.calleePersonalCode);
     assert.isFalse(socket.id === data.calleePersonalCode, 'Socket.id should never be equal to data.calleePersonalCode');
 
     console.log('pre-offer from', socket.id, data);
@@ -42,18 +44,18 @@ io.on('connection', (socket) => {
       return;
     }
 
-    const calleePayload: CalleePreOffer = {
+    const payloadForCallee: PreOfferForCallee = {
       callerSocketId: socket.id,
       callType: data.callType,
       from: 'back',
       to: 'front',
     };
 
-    console.log('sending offer to callee:', calleePayload);
-    io.to(data.calleePersonalCode).emit(event('pre-offer').from('back').to('front'), calleePayload);
+    console.log('sending offer to callee:', payloadForCallee);
+    io.to(data.calleePersonalCode).emit(event('pre-offer').from('back').to('front'), payloadForCallee);
   });
 
-  socket.on(event('pre-offer-answer').from('front').to('back'), (data: CalleePreAnswer) => {
+  socket.on(event('pre-offer-answer').from('front').to('back'), (data: PreAnswerFromCallee) => {
     assert.isString(data.preOfferAnswer, 'data.preOfferAnswer should be a string: ' + data.preOfferAnswer);
     assert.isString(data.callerSocketId, 'data.callerSocketId should be a string' + data.callerSocketId);
     assert.isFalse(socket.id === data.callerSocketId, 'pre-offer-answer should not came to server from callerSocketId');
@@ -65,10 +67,13 @@ io.on('connection', (socket) => {
       return;
     }
 
-    data.from = 'back';
-    data.to = 'front';
+    const payloadForCaller: PreAnswerForCaller = {
+      ...data,
+      from: 'back',
+      to: 'front',
+    };
 
-    io.to(data.callerSocketId).emit(event('pre-offer-answer').from('back').to('front'), data);
+    io.to(data.callerSocketId).emit(event('pre-offer-answer').from('back').to('front'), payloadForCaller);
   });
 
   socket.on('disconnect', () => {
