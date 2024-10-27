@@ -6,4 +6,5 @@ export const TOKEN = {
   Socket: Symbol.for('Socket'),
   CallerSignaling: Symbol.for('CallerSignaling'),
   CalleeSignaling: Symbol.for('CalleeSignaling'),
+  CalleeEventsHandler: Symbol.for('CalleeEventsHandler'),
 };
