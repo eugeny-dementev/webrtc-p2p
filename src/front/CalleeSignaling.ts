@@ -13,7 +13,7 @@ export class CalleeSignaling {
     @inject(TOKEN.Store) private readonly store: Store,
   ) { }
 
-  onPreOfferFromCaller(callback: (payload: PreOfferForCallee) => void) {
+  subscribeToPreOfferFromCaller(callback: (payload: PreOfferForCallee) => void) {
     this.socket.on(SIGNALING_EVENT.PRE_OFFER_FOR_CALLEE, (payload: PreOfferForCallee) => {
       assert.isFalse(payload.callerSocketId === this.store.socketId, 'PreOffer should never came from the same socket id');
 
