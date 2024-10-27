@@ -3,4 +3,5 @@ export const TOKEN = {
   Store: Symbol.for('Store'),
   UI: Symbol.for('UI'),
   SocketClient: Symbol.for('SocketClient'),
+  Socket: Symbol.for('Socket'),
 };

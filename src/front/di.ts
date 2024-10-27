@@ -1,5 +1,5 @@
 import { Container } from "inversify";
-import { SocketClient } from "./SocketClient";
+import { io, Socket } from "socket.io-client";
 import { Store } from "./store";
 import { TOKEN } from "./tokens";
 import { UI } from "./ui";
@@ -18,8 +18,11 @@ container
   .inSingletonScope();
 
 container
-  .bind<SocketClient>(TOKEN.SocketClient)
-  .to(SocketClient)
+  .bind<Socket>(TOKEN.Socket)
+  .toDynamicValue((): Socket => io('http://localhost:3030', {
+    transports: ['websocket', 'polling'],
+    upgrade: true,
+  }))
   .inSingletonScope();
 
 container
