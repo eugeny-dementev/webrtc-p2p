@@ -1,8 +1,11 @@
 import { assert } from "../common/assert";
 import { CALL_TYPE, PreOfferAnswer } from "../common/constants";
-import { PreAnswerFromCallee, PreOfferForCallee, PreOfferFromCaller, PreAnswerForCaller } from "../common/types";
+import { PreAnswerForCaller, PreOfferForCallee } from "../common/types";
+import { CalleeSignaling } from "./CalleeSignaling";
+import { CallerSignaling } from "./CallerSignaling";
+import { container } from "./di";
+import { TOKEN } from "./tokens";
 import * as ui from './ui';
-import * as wss from './wss';
 
 let connectedUserDetails: { callType: any; socketId: any; };
 
@@ -16,18 +19,11 @@ export function sendPreOffer(calleePersonalCode: string, callType: CALL_TYPE) {
   }
 
   if (callType === CALL_TYPE.PersonalChat || callType === CALL_TYPE.PersonalCall) {
-    const data: PreOfferFromCaller = {
-      callType: callType,
-      calleePersonalCode: calleePersonalCode,
-      from: 'front',
-      to: 'back',
-    };
 
     ui.showCallingDialog(cancelCallHandler);
 
-    wss.getSocketConnection().then(socket => {
-      wss.sendPreOffer(socket, data);
-    })
+    const callerSignaling = container.get<CallerSignaling>(TOKEN.CallerSignaling);
+    callerSignaling.emitPreOfferToCallee(callType, calleePersonalCode);
   }
 }
 
@@ -72,17 +68,10 @@ function cancelCallHandler() {
 function sendPreOfferAnswer(preOfferAnswer: PreOfferAnswer) {
   assert.oneOf(preOfferAnswer, Object.values(PreOfferAnswer));
 
-  const data: PreAnswerFromCallee = {
-    callerSocketId: connectedUserDetails.socketId,
-    preOfferAnswer,
-    from: 'front',
-    to: 'back',
-  };
-
   ui.removeAllDialogs();
-  wss.getSocketConnection().then(socket => {
-    wss.sendPreOfferAnswer(socket, data);
-  });
+
+  const calleeSignaling = container.get<CalleeSignaling>(TOKEN.CalleeSignaling);
+  calleeSignaling.emitPreAnswerToCaller(preOfferAnswer);
 }
 
 export function handlePreOfferAnswer(data: PreAnswerForCaller) {
