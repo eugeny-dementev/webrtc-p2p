@@ -21,7 +21,12 @@ export class CallerSignaling {
     this.socket.emit(SIGNALING_EVENT.PRE_OFFER_FROM_CALLER, payload);
   }
   subscribeToPreAnswerFromCallee(callback: (payload: PreAnswerForCaller) => void) {
-    this.socket.on(SIGNALING_EVENT.PRE_ANSWER_FOR_CALLER, callback);
+    this.socket.on(SIGNALING_EVENT.PRE_ANSWER_FOR_CALLER, (payload: PreAnswerForCaller) => {
+      assert.is(payload.from, 'back', 'handlePreOffer should always to receive events from the back');
+      assert.is(payload.to, 'front', 'handlePreOffer should always to receive events targeted to the front');
+
+      return callback(payload);
+    });
   }
 
   // emitOfferToCallee(data) {

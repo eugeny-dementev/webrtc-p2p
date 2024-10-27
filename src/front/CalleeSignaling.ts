@@ -15,6 +15,8 @@ export class CalleeSignaling {
 
   subscribeToPreOfferFromCaller(callback: (payload: PreOfferForCallee) => void) {
     this.socket.on(SIGNALING_EVENT.PRE_OFFER_FOR_CALLEE, (payload: PreOfferForCallee) => {
+      assert.is(payload.from, 'back', 'handlePreOffer should always to receive events from the back');
+      assert.is(payload.to, 'front', 'handlePreOffer should always to receive events targeted to the front');
       assert.isFalse(payload.callerSocketId === this.store.socketId, 'PreOffer should never came from the same socket id');
 
       this.store.callerSocketId = payload.callerSocketId;
