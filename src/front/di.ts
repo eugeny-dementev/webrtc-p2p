@@ -1,4 +1,5 @@
 import { Container } from "inversify";
+import { SocketClient } from "./SocketClient";
 import { Store } from "./store";
 import { TOKEN } from "./tokens";
 import { UI } from "./ui";
@@ -14,6 +15,11 @@ container
 container
   .bind<UI>(TOKEN.UI)
   .to(UI)
+  .inSingletonScope();
+
+container
+  .bind<SocketClient>(TOKEN.SocketClient)
+  .to(SocketClient)
   .inSingletonScope();
 
 container
