@@ -42,6 +42,12 @@ export class Store {
   get socketId(): string {
     return this.state.socketId;
   }
+  set callerSocketId(value: string | undefined) {
+    this.state = Object.freeze({ ...this.state, callerSocketId: value })
+  }
+  get callerSocketId() {
+    return this.state.callerSocketId;
+  }
 
   // Streams
   set localStream(value: State['localStream']) {
