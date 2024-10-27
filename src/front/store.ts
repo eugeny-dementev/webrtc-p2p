@@ -3,6 +3,7 @@ import { assert } from "../common/assert";
 
 type State = {
   socketId: string;
+  callerSocketId: string | undefined;
 
   localStream: MediaStream | null;
   remoteStream: MediaStream | null;
@@ -19,6 +20,7 @@ type State = {
 export class Store {
   private state: State = Object.freeze({
     socketId: null,
+    callerSocketId: undefined,
 
     localStream: null,
     remoteStream: null,
