@@ -3,7 +3,7 @@ import express from 'express';
 import http from 'http';
 import path from 'path';
 import { assert } from '../common/assert';
-import { PRE_OFFER_ANSWER } from '../common/constants';
+import { PreOfferAnswer } from '../common/constants';
 import { event } from '../common/helpers';
 import {
   PreAnswerForCaller, PreAnswerFromCallee, PreOfferForCallee, PreOfferFromCaller
@@ -38,7 +38,7 @@ io.on('connection', (socket) => {
 
     if (!connectedPeers.has(data.calleePersonalCode)) {
       io.to(socket.id).emit('pre-offer-answer', {
-        preOfferAnswer: PRE_OFFER_ANSWER.CALLEE_NOT_FOUND,
+        preOfferAnswer: PreOfferAnswer.CalleeNotFound,
       });
 
       return;

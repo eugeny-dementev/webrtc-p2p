@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
 import { assert } from "../common/assert";
-import { CALL_TYPE, CALL_TYPE_TO_INFO, PRE_OFFER_ANSWER } from "../common/constants";
+import { CALL_TYPE, CALL_TYPE_TO_INFO, PreOfferAnswer } from "../common/constants";
 import * as elements from './elements';
 import { Store } from "./store";
 import { TOKEN } from "./tokens";
@@ -77,13 +77,13 @@ export function removeAllDialogs() {
 }
 
 export function showInfoDialog(preOfferAnswer) {
-  assert.oneOf(preOfferAnswer, Object.values(PRE_OFFER_ANSWER));
+  assert.oneOf(preOfferAnswer, Object.values(PreOfferAnswer));
 
   let infoDialog = new elements.Dialog();
   let showDialog = false;
 
   switch (preOfferAnswer) {
-    case PRE_OFFER_ANSWER.CALL_REJECTED: {
+    case PreOfferAnswer.CallRejected: {
       infoDialog
         .setTitle('Call rejected')
         .setDescription('Callee rejected your call')
@@ -91,7 +91,7 @@ export function showInfoDialog(preOfferAnswer) {
 
       break;
     }
-    case PRE_OFFER_ANSWER.CALLEE_NOT_FOUND: {
+    case PreOfferAnswer.CalleeNotFound: {
       infoDialog
         .setTitle('Call not found')
         .setDescription('Please check provided personal code')
@@ -99,7 +99,7 @@ export function showInfoDialog(preOfferAnswer) {
 
       break;
     }
-    case PRE_OFFER_ANSWER.CALLEE_UNAVAILABLE: {
+    case PreOfferAnswer.CalleeUnavailable: {
       infoDialog
         .setTitle('Call is not possible')
         .setDescription('Probably callee is busy. Please try again later')

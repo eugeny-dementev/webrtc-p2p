@@ -1,4 +1,4 @@
-import { CALL_TYPE, PRE_OFFER_ANSWER } from "./constants";
+import { CALL_TYPE, PreOfferAnswer } from "./constants";
 
 export interface FrontToBack {
   from: 'front',
@@ -22,12 +22,12 @@ export interface PreOfferForCallee extends BackToFront {
 
 
 export interface PreAnswerFromCallee extends FrontToBack {
-  preOfferAnswer: PRE_OFFER_ANSWER,
+  preOfferAnswer: PreOfferAnswer,
   callerSocketId: string,
 }
 // callee(PreAnswerFromCallee) => back(PreAnswerFromCallee->PreAnswerForCaller) => caller(PreAnswerForCaller)
 export interface PreAnswerForCaller extends BackToFront {
-  preOfferAnswer: PRE_OFFER_ANSWER,
+  preOfferAnswer: PreOfferAnswer,
   callerSocketId: string,
 }
 

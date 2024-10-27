@@ -1,5 +1,5 @@
 import { assert } from "../common/assert";
-import { CALL_TYPE, PRE_OFFER_ANSWER } from "../common/constants";
+import { CALL_TYPE, PreOfferAnswer } from "../common/constants";
 import { PreAnswerFromCallee, PreOfferForCallee, PreOfferFromCaller, PreAnswerForCaller } from "../common/types";
 import * as ui from './ui';
 import * as wss from './wss';
@@ -56,21 +56,21 @@ export function handlePreOffer(data: PreOfferForCallee) {
 
 function acceptCallHandler() {
   console.log('acceptCallHandler()');
-  sendPreOfferAnswer(PRE_OFFER_ANSWER.CALL_ACCEPTED);
+  sendPreOfferAnswer(PreOfferAnswer.CallAccepted);
   ui.showCallElements(connectedUserDetails.callType);
 }
 
 function rejectCallHandler() {
   console.log('rejectCallHandler()');
-  sendPreOfferAnswer(PRE_OFFER_ANSWER.CALL_REJECTED);
+  sendPreOfferAnswer(PreOfferAnswer.CallRejected);
 }
 
 function cancelCallHandler() {
   console.log('cancelCallHandler()');
 }
 
-function sendPreOfferAnswer(preOfferAnswer: PRE_OFFER_ANSWER) {
-  assert.oneOf(preOfferAnswer, Object.values(PRE_OFFER_ANSWER));
+function sendPreOfferAnswer(preOfferAnswer: PreOfferAnswer) {
+  assert.oneOf(preOfferAnswer, Object.values(PreOfferAnswer));
 
   const data: PreAnswerFromCallee = {
     callerSocketId: connectedUserDetails.socketId,
@@ -86,16 +86,16 @@ function sendPreOfferAnswer(preOfferAnswer: PRE_OFFER_ANSWER) {
 }
 
 export function handlePreOfferAnswer(data: PreAnswerForCaller) {
-  assert.oneOf(data.preOfferAnswer, Object.values(PRE_OFFER_ANSWER));
+  assert.oneOf(data.preOfferAnswer, Object.values(PreOfferAnswer));
 
   switch (data.preOfferAnswer) {
-    case PRE_OFFER_ANSWER.CALLEE_UNAVAILABLE:
-    case PRE_OFFER_ANSWER.CALLEE_NOT_FOUND:
-    case PRE_OFFER_ANSWER.CALL_REJECTED: {
+    case PreOfferAnswer.CalleeUnavailable:
+    case PreOfferAnswer.CalleeNotFound:
+    case PreOfferAnswer.CallRejected: {
       ui.showInfoDialog(data.preOfferAnswer);
       break;
     }
-    case PRE_OFFER_ANSWER.CALL_ACCEPTED: {
+    case PreOfferAnswer.CallAccepted: {
       ui.removeAllDialogs();
       ui.showCallElements(connectedUserDetails.callType);
       break;

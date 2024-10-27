@@ -1,7 +1,7 @@
 import { inject, injectable } from "inversify";
 import { Socket } from "socket.io-client";
 import { assert } from "../common/assert";
-import { frontToBack, PRE_OFFER_ANSWER, SIGNALING_EVENT } from "../common/constants";
+import { frontToBack, PreOfferAnswer, SIGNALING_EVENT } from "../common/constants";
 import { PreAnswerFromCallee, PreOfferForCallee } from "../common/types";
 import { Store } from "./store";
 import { TOKEN } from "./tokens";
@@ -22,7 +22,7 @@ export class CalleeSignaling {
       return callback(payload);
     });
   }
-  emitPreAnswerToCaller(preOfferAnswer: PRE_OFFER_ANSWER) {
+  emitPreAnswerToCaller(preOfferAnswer: PreOfferAnswer) {
     const payload: PreAnswerFromCallee = {
       ...frontToBack,
       callerSocketId: this.store.callerSocketId,

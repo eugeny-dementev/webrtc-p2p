@@ -16,11 +16,11 @@ export const CALL_TYPE_TO_INFO: Record<CALL_TYPE, CALL_INFO> = {
   [CALL_TYPE.PersonalChat]: CALL_INFO.Chat,
 }
 
-export enum PRE_OFFER_ANSWER {
-  CALLEE_NOT_FOUND = 'CALLEE_NOT_FOUND',
-  CALL_ACCEPTED = 'CALL_ACCEPTED',
-  CALL_REJECTED = 'CALL_REJECTED',
-  CALLEE_UNAVAILABLE = 'CALL_UNAVAILABLE',
+export enum PreOfferAnswer {
+  CalleeNotFound = 'CALLEE_NOT_FOUND',
+  CallAccepted = 'CALL_ACCEPTED',
+  CallRejected = 'CALL_REJECTED',
+  CalleeUnavailable = 'CALL_UNAVAILABLE',
 };
 
 export const frontToBack: FrontToBack = {
