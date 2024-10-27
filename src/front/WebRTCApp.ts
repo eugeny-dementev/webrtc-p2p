@@ -2,8 +2,8 @@ import { inject, injectable } from 'inversify';
 import { Socket } from 'socket.io-client';
 import { assert } from '../common/assert';
 import { CALL_TYPE } from '../common/constants';
-import { PreAnswerForCaller, PreOfferForCallee } from '../common/types';
-import { CalleeSignaling } from './CalleeSignaling';
+import { PreAnswerForCaller } from '../common/types';
+import { CalleeEventsHandler } from './CalleeEventsHandler';
 import { CallerSignaling } from './CallerSignaling';
 import { Store } from './store';
 import { TOKEN } from './tokens';
@@ -16,7 +16,7 @@ export class WebRTCApp {
     @inject(TOKEN.Store) private readonly store: Store,
     @inject(TOKEN.Socket) private readonly socket: Socket,
     @inject(TOKEN.CallerSignaling) private readonly callerSignaling: CallerSignaling,
-    @inject(TOKEN.CalleeSignaling) private readonly calleeSignaling: CalleeSignaling,
+    @inject(TOKEN.CalleeEventsHandler) private readonly calleeHandler: CalleeEventsHandler,
     @inject(TOKEN.UI) private readonly ui: UI,
   ) { }
 
@@ -27,9 +27,7 @@ export class WebRTCApp {
       this.ui.updatePersonalCode();
     });
 
-    this.calleeSignaling.subscribeToPreOfferFromCaller((payload: PreOfferForCallee) => {
-      webRTCHandler.handlePreOffer(payload);
-    })
+    this.calleeHandler.subscribe();
 
     this.callerSignaling.subscribeToPreAnswerFromCallee((payload: PreAnswerForCaller) => {
       webRTCHandler.handlePreOfferAnswer(payload);
