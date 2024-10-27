@@ -25,7 +25,6 @@ const connectedPeers = new Set();
 
 io.on('connection', (socket) => {
   connectedPeers.add(socket.id);
-  console.log('user connected to Socket.IO server', socket.id);
   console.log('connectedPeers', connectedPeers);
 
   socket.on(event('pre-offer').from('front').to('back'), (data) => {
