@@ -1,7 +1,6 @@
 import { assert } from "../common/assert";
 import { CALL_TYPE, PreOfferAnswer } from "../common/constants";
-import { PreAnswerForCaller, PreOfferForCallee } from "../common/types";
-import { CalleeSignaling } from "./CalleeSignaling";
+import { PreAnswerForCaller } from "../common/types";
 import { CallerSignaling } from "./CallerSignaling";
 import { container } from "./di";
 import { TOKEN } from "./tokens";
@@ -27,51 +26,8 @@ export function sendPreOffer(calleePersonalCode: string, callType: CALL_TYPE) {
   }
 }
 
-/**
- * @param data {object}
- * @param data.callType {string}
- * @param data.callerPersonalCode {string}
- */
-export function handlePreOffer(data: PreOfferForCallee) {
-  assert.oneOf(data.callType, Object.values(CALL_TYPE));
-  assert.isString(data.callerSocketId, 'data.callerSocketId should be a string');
-  assert.is(data.from, 'back', 'handlePreOffer should always to receive events from the back');
-  assert.is(data.to, 'front', 'handlePreOffer should always to receive events targeted to the front');
-
-  const { callType, callerSocketId } = data;
-
-  connectedUserDetails = {
-    socketId: callerSocketId,
-    callType,
-  };
-
-  if (callType === CALL_TYPE.PersonalChat || callType === CALL_TYPE.PersonalCall) {
-    ui.showIncomingCallingDialog(callType, acceptCallHandler, rejectCallHandler);
-  }
-}
-
-function acceptCallHandler() {
-  console.log('acceptCallHandler()');
-  sendPreOfferAnswer(PreOfferAnswer.CallAccepted);
-  ui.showCallElements(connectedUserDetails.callType);
-}
-
-function rejectCallHandler() {
-  console.log('rejectCallHandler()');
-  sendPreOfferAnswer(PreOfferAnswer.CallRejected);
-}
-
 function cancelCallHandler() {
   console.log('cancelCallHandler()');
-}
-
-function sendPreOfferAnswer(preOfferAnswer: PreOfferAnswer) {
-  assert.oneOf(preOfferAnswer, Object.values(PreOfferAnswer));
-
-  ui.removeAllDialogs();
-
-  const calleeSignaling = container.get<CalleeSignaling>(TOKEN.CalleeSignaling);
-  calleeSignaling.emitPreAnswerToCaller(preOfferAnswer);
 }
 
 export function handlePreOfferAnswer(data: PreAnswerForCaller) {
