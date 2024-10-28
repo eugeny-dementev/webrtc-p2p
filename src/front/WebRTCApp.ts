@@ -4,6 +4,7 @@ import { assert } from '../common/assert';
 import { CALL_TYPE } from '../common/constants';
 import { PreAnswerForCaller } from '../common/types';
 import { CalleeEventsHandler } from './CalleeEventsHandler';
+import { CallerEventsHandler } from './CallerEventsHandler';
 import { CallerSignaling } from './CallerSignaling';
 import { Store } from './store';
 import { TOKEN } from './tokens';
@@ -17,6 +18,7 @@ export class WebRTCApp {
     @inject(TOKEN.Socket) private readonly socket: Socket,
     @inject(TOKEN.CallerSignaling) private readonly callerSignaling: CallerSignaling,
     @inject(TOKEN.CalleeEventsHandler) private readonly calleeHandler: CalleeEventsHandler,
+    @inject(TOKEN.CallerEventsHandler) private readonly callerHandler: CallerEventsHandler,
     @inject(TOKEN.UI) private readonly ui: UI,
   ) { }
 
@@ -28,10 +30,7 @@ export class WebRTCApp {
     });
 
     this.calleeHandler.subscribe();
-
-    this.callerSignaling.subscribeToPreAnswerFromCallee((payload: PreAnswerForCaller) => {
-      webRTCHandler.handlePreOfferAnswer(payload);
-    })
+    this.callerHandler.subscribe();
 
     this.ui.registerButtonHandler('personal_code_copy_button', () => {
       const code = this.store.socketId;
