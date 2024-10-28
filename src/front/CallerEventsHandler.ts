@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
 import { assert } from "../common/assert";
-import { PreOfferAnswer } from "../common/constants";
+import { CALL_TYPE, PreOfferAnswer } from "../common/constants";
 import { PreAnswerForCaller } from "../common/types";
 import { CallerSignaling } from "./CallerSignaling";
 import { Store } from "./store";
@@ -14,6 +14,23 @@ export class CallerEventsHandler {
     @inject(TOKEN.Store) private readonly store: Store,
     @inject(TOKEN.UI) private readonly ui: UI,
   ) { }
+
+  emitPreOffer(calleePersonalCode: string, callType: CALL_TYPE) {
+    assert.isString(calleePersonalCode, 'offer code should be a string');
+    assert.oneOf(callType, Object.values(CALL_TYPE));
+
+    if (callType === CALL_TYPE.PersonalChat || callType === CALL_TYPE.PersonalCall) {
+
+      this.store.callType = callType;
+
+      this.ui.showCallingDialog(() => {
+        this.store.callType = undefined;
+        console.log('Caller canceled call');
+      });
+
+      this.caller.emitPreOfferToCallee(callType, calleePersonalCode);
+    }
+  }
 
   subscribe() {
     this.caller.subscribeToPreAnswerFromCallee((payload: PreAnswerForCaller) => {
