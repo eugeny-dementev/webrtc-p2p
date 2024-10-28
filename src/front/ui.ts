@@ -43,12 +43,52 @@ export class UI {
       .setTitle(`Incoming ${callTypeInfo} Call`)
       .addButton('accept', accept)
       .addButton('reject', reject)
-      .appendButtons()
-      .getElement();
+      .appendButtons();
 
-    const dialogHTML = document.getElementById('dialog');
-    dialogHTML.innerHTML = '';
-    dialogHTML.appendChild(incomingCallDialog);
+    this.showDialog(incomingCallDialog);
+  }
+
+  showInfoDialog(preOfferAnswer: PreOfferAnswer) {
+    assert.oneOf(preOfferAnswer, Object.values(PreOfferAnswer));
+
+    let infoDialog = new elements.Dialog();
+    let showDialog = false;
+
+    switch (preOfferAnswer) {
+      case PreOfferAnswer.CallRejected: {
+        infoDialog
+          .setTitle('Call rejected')
+          .setDescription('Callee rejected your call')
+        showDialog = true
+
+        break;
+      }
+      case PreOfferAnswer.CalleeNotFound: {
+        infoDialog
+          .setTitle('Call not found')
+          .setDescription('Please check provided personal code')
+        showDialog = true
+
+        break;
+      }
+      case PreOfferAnswer.CalleeUnavailable: {
+        infoDialog
+          .setTitle('Call is not possible')
+          .setDescription('Probably callee is busy. Please try again later')
+        showDialog = true
+
+        break;
+      }
+      default: throw new TypeError('Unexpected preOfferAnswer ' + preOfferAnswer);
+    }
+
+    if (showDialog) {
+      this.showDialog(infoDialog);
+
+      setTimeout(() => {
+        removeAllDialogs()
+      }, 4000);
+    }
   }
 
   showCallElements(callType: CALL_TYPE) {
@@ -83,6 +123,17 @@ export class UI {
 
     // block panel until call is ended
     disableDashboard();
+  }
+
+  private showDialog(dialog: elements.Dialog) {
+    const dialogHTML = document.getElementById('dialog');
+    dialogHTML.innerHTML = '';
+    dialogHTML.appendChild(dialog.getElement());
+  }
+
+  removeDialog() {
+    const dialogHTML = document.getElementById('dialog');
+    dialogHTML.innerHTML = '';
   }
 
   private hide(id: HTMLElement['id']) {
