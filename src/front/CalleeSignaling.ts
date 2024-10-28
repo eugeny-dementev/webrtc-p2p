@@ -19,6 +19,8 @@ export class CalleeSignaling {
       assert.is(payload.to, 'front', 'handlePreOffer should always to receive events targeted to the front');
       assert.isFalse(payload.callerSocketId === this.store.socketId, 'PreOffer should never came from the same socket id');
 
+      console.log(`Received ${SIGNALING_EVENT.PRE_OFFER_FOR_CALLEE}`, payload);
+
       return callback(payload);
     });
   }
@@ -28,6 +30,8 @@ export class CalleeSignaling {
       callerSocketId: this.store.callerSocketId,
       preOfferAnswer,
     }
+
+    console.log(`Emitting ${SIGNALING_EVENT.PRE_ANSWER_FROM_CALLEE}`, payload);
 
     this.socket.emit(SIGNALING_EVENT.PRE_ANSWER_FROM_CALLEE, payload);
   }

@@ -3,7 +3,7 @@ import express from 'express';
 import http from 'http';
 import path from 'path';
 import { assert } from '../common/assert';
-import { PreOfferAnswer } from '../common/constants';
+import { PreOfferAnswer, SIGNALING_EVENT } from '../common/constants';
 import { event } from '../common/helpers';
 import {
   PreAnswerForCaller, PreAnswerFromCallee, PreOfferForCallee, PreOfferFromCaller
@@ -29,12 +29,12 @@ io.on('connection', (socket) => {
   connectedPeers.add(socket.id);
   console.log('connectedPeers', connectedPeers);
 
-  socket.on(event('pre-offer').from('front').to('back'), (data: PreOfferFromCaller) => {
+  socket.on(SIGNALING_EVENT.PRE_OFFER_FROM_CALLER, (data: PreOfferFromCaller) => {
     assert.isString(data.callType, 'data.preOfferAnswer should be a string: ' + data.callType);
     assert.isString(data.calleePersonalCode, 'data.callerSocketId should be a string' + data.calleePersonalCode);
     assert.isFalse(socket.id === data.calleePersonalCode, 'Socket.id should never be equal to data.calleePersonalCode');
 
-    console.log('pre-offer from', socket.id, data);
+    console.log(`Received ${SIGNALING_EVENT.PRE_OFFER_FROM_CALLER} from ${socket.id}`, data);
 
     if (!connectedPeers.has(data.calleePersonalCode)) {
       io.to(socket.id).emit('pre-offer-answer', {
@@ -51,16 +51,17 @@ io.on('connection', (socket) => {
       to: 'front',
     };
 
-    console.log('sending offer to callee:', payloadForCallee);
-    io.to(data.calleePersonalCode).emit(event('pre-offer').from('back').to('front'), payloadForCallee);
+    console.log(`Emitting ${SIGNALING_EVENT.PRE_OFFER_FOR_CALLEE} to ${data.calleePersonalCode}`, payloadForCallee);
+
+    io.to(data.calleePersonalCode).emit(SIGNALING_EVENT.PRE_OFFER_FOR_CALLEE, payloadForCallee);
   });
 
-  socket.on(event('pre-offer-answer').from('front').to('back'), (data: PreAnswerFromCallee) => {
+  socket.on(SIGNALING_EVENT.PRE_ANSWER_FROM_CALLEE, (data: PreAnswerFromCallee) => {
     assert.isString(data.preOfferAnswer, 'data.preOfferAnswer should be a string: ' + data.preOfferAnswer);
     assert.isString(data.callerSocketId, 'data.callerSocketId should be a string' + data.callerSocketId);
     assert.isFalse(socket.id === data.callerSocketId, 'pre-offer-answer should not came to server from callerSocketId');
 
-    console.log('pre-offer-answer received:', data);
+    console.log(`Received ${SIGNALING_EVENT.PRE_ANSWER_FROM_CALLEE} from ${socket.id}`, data);
 
     if (!connectedPeers.has(data.callerSocketId)) {
       console.log('Caller not found', data.callerSocketId);
@@ -73,7 +74,9 @@ io.on('connection', (socket) => {
       to: 'front',
     };
 
-    io.to(data.callerSocketId).emit(event('pre-offer-answer').from('back').to('front'), payloadForCaller);
+    console.log(`Emitting ${SIGNALING_EVENT.PRE_ANSWER_FOR_CALLER} to ${data.callerSocketId}`, payloadForCaller);
+
+    io.to(data.callerSocketId).emit(SIGNALING_EVENT.PRE_ANSWER_FOR_CALLER, payloadForCaller);
   });
 
   socket.on('disconnect', () => {
