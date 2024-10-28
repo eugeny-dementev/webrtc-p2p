@@ -34,7 +34,6 @@ export class CallerEventsHandler {
         break;
       }
       case PreOfferAnswer.CallAccepted: {
-        alert('call accepted')
         this.ui.showCallElements(this.store.callType);
         this.ui.removeDialog();
         break;
