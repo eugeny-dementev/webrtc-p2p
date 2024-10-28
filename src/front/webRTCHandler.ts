@@ -3,6 +3,7 @@ import { CALL_TYPE, PreOfferAnswer } from "../common/constants";
 import { PreAnswerForCaller } from "../common/types";
 import { CallerSignaling } from "./CallerSignaling";
 import { container } from "./di";
+import { Store } from "./store";
 import { TOKEN } from "./tokens";
 import * as ui from './ui';
 
@@ -20,6 +21,9 @@ export function sendPreOffer(calleePersonalCode: string, callType: CALL_TYPE) {
   if (callType === CALL_TYPE.PersonalChat || callType === CALL_TYPE.PersonalCall) {
 
     ui.showCallingDialog(cancelCallHandler);
+
+    const store = container.get<Store>(TOKEN.Store);
+    store.callType = callType;
 
     const callerSignaling = container.get<CallerSignaling>(TOKEN.CallerSignaling);
     callerSignaling.emitPreOfferToCallee(callType, calleePersonalCode);
