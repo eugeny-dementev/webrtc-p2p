@@ -2,14 +2,12 @@ import { inject, injectable } from 'inversify';
 import { Socket } from 'socket.io-client';
 import { assert } from '../common/assert';
 import { CALL_TYPE } from '../common/constants';
-import { PreAnswerForCaller } from '../common/types';
 import { CalleeEventsHandler } from './CalleeEventsHandler';
 import { CallerEventsHandler } from './CallerEventsHandler';
 import { CallerSignaling } from './CallerSignaling';
 import { Store } from './store';
 import { TOKEN } from './tokens';
 import { UI } from './ui';
-import * as webRTCHandler from './webRTCHandler';
 
 @injectable()
 export class WebRTCApp {
