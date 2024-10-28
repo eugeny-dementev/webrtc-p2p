@@ -57,14 +57,50 @@ export class UI {
     console.log('showCallElements(callType)', callType);
 
     if (callType === CALL_TYPE.PersonalChat) {
-      showChatCallElements();
+      this.showChatCallElements();
     }
 
     if (callType === CALL_TYPE.PersonalCall) {
-      showVideoCallElements();
+      this.showVideoCallElements();
     }
 
     removeAllDialogs();
+  }
+
+  private showChatCallElements() {
+    this.show('finish_chat_button_container');
+    this.show('new_message');
+
+    // block panel until chat is ended
+    disableDashboard();
+  }
+
+  private showVideoCallElements() {
+    this.show('call_buttons');
+    this.hide('videos_placeholder');
+    this.show('remote_video');
+    this.show('new_message')
+
+    // block panel until call is ended
+    disableDashboard();
+  }
+
+  private hide(id: HTMLElement['id']) {
+    const element = document.getElementById(id);
+    assert.isInstanceOf(element, HTMLElement, `div[#${id}] element must exist`);
+
+    if (!element.classList.contains('display_none')) {
+      element.classList.add('display_none');
+    }
+  }
+
+  private show(id: HTMLElement['id']) {
+    const element = document.getElementById(id);
+    assert.isInstanceOf(element, HTMLElement, `div[#${id}] element must exist`);
+
+    if (element.classList.contains('display_none')) {
+      element.classList.remove('display_none');
+    }
   }
 }
 
