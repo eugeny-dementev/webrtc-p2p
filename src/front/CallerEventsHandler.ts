@@ -8,7 +8,7 @@ import { TOKEN } from "./tokens";
 import { UI } from "./ui";
 
 @injectable()
-export class CalleeEventsHandler {
+export class CallerEventsHandler {
   constructor(
     @inject(TOKEN.CallerSignaling) private readonly caller: CallerSignaling,
     @inject(TOKEN.Store) private readonly store: Store,
@@ -34,8 +34,9 @@ export class CalleeEventsHandler {
         break;
       }
       case PreOfferAnswer.CallAccepted: {
-        this.ui.removeDialog();
+        alert('call accepted')
         this.ui.showCallElements(this.store.callType);
+        this.ui.removeDialog();
         break;
       };
       default: {
