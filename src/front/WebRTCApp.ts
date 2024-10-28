@@ -4,7 +4,6 @@ import { assert } from '../common/assert';
 import { CALL_TYPE } from '../common/constants';
 import { CalleeEventsHandler } from './CalleeEventsHandler';
 import { CallerEventsHandler } from './CallerEventsHandler';
-import { CallerSignaling } from './CallerSignaling';
 import { Store } from './store';
 import { TOKEN } from './tokens';
 import { UI } from './ui';
@@ -14,7 +13,6 @@ export class WebRTCApp {
   constructor(
     @inject(TOKEN.Store) private readonly store: Store,
     @inject(TOKEN.Socket) private readonly socket: Socket,
-    @inject(TOKEN.CallerSignaling) private readonly callerSignaling: CallerSignaling,
     @inject(TOKEN.CalleeEventsHandler) private readonly calleeHandler: CalleeEventsHandler,
     @inject(TOKEN.CallerEventsHandler) private readonly callerHandler: CallerEventsHandler,
     @inject(TOKEN.UI) private readonly ui: UI,
