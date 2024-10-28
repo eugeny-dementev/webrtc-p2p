@@ -2,6 +2,7 @@ import { Container } from "inversify";
 import { io, Socket } from "socket.io-client";
 import { CalleeEventsHandler } from "./CalleeEventsHandler";
 import { CalleeSignaling } from "./CalleeSignaling";
+import { CallerEventsHandler } from "./CallerEventsHandler";
 import { CallerSignaling } from "./CallerSignaling";
 import { Store } from "./store";
 import { TOKEN } from "./tokens";
@@ -31,7 +32,12 @@ container
 container
   .bind<CallerSignaling>(TOKEN.CallerSignaling)
   .to(CallerSignaling)
-  .inSingletonScope()
+  .inSingletonScope();
+
+container
+  .bind<CallerEventsHandler>(TOKEN.CallerEventsHandler)
+  .to(CallerEventsHandler)
+  .inSingletonScope();
 
 container
   .bind<CalleeSignaling>(TOKEN.CalleeSignaling)
