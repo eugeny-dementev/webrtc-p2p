@@ -44,13 +44,13 @@ export class WebRTCApp {
     this.ui.registerButtonHandler('personal_code_chat_button', () => {
       const code = this.ui.getInputValue('personal_code_input')
 
-      webRTCHandler.sendPreOffer(code, CALL_TYPE.PersonalChat);
+      this.callerHandler.emitPreOffer(code, CALL_TYPE.PersonalChat);
     })
 
     this.ui.registerButtonHandler('personal_code_video_button', () => {
       const code = this.ui.getInputValue('personal_code_input')
 
-      webRTCHandler.sendPreOffer(code, CALL_TYPE.PersonalCall);
+      this.callerHandler.emitPreOffer(code, CALL_TYPE.PersonalCall);
     });
   }
 }
