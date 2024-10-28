@@ -1,9 +1,11 @@
 import { injectable } from "inversify";
 import { assert } from "../common/assert";
+import { CALL_TYPE } from "../common/constants";
 
 type State = {
   socketId: string;
   callerSocketId: string | undefined;
+  callType: CALL_TYPE | undefined;
 
   localStream: MediaStream | null;
   remoteStream: MediaStream | null;
@@ -21,6 +23,7 @@ export class Store {
   private state: State = Object.freeze({
     socketId: null,
     callerSocketId: undefined,
+    callType: undefined,
 
     localStream: null,
     remoteStream: null,
@@ -47,6 +50,12 @@ export class Store {
   }
   get callerSocketId() {
     return this.state.callerSocketId;
+  }
+  set callType(value: CALL_TYPE | undefined) {
+    this.state = Object.freeze({ ...this.state, callType: value })
+  }
+  get callType() {
+    return this.state.callType;
   }
 
   // Streams
