@@ -4,8 +4,8 @@ import { CALL_TYPE } from "../common/constants";
 
 type State = {
   socketId: string;
-  callerSocketId: string | undefined;
-  callType: CALL_TYPE | undefined;
+  callerSocketId: string | undefined; // @FIXME: add cleanup after call is ended
+  callType: CALL_TYPE | undefined; // @FIXME: add cleanup after call is ended
 
   localStream: MediaStream | null;
   remoteStream: MediaStream | null;
