@@ -34,6 +34,21 @@ export class UI {
     return input.value;
   }
 
+
+  showCallingDialog(cancel: HTMLElement['onclick']) {
+    assert.isFunction(cancel, 'cancelCallHandler should be a function');
+
+    const callDialog = new elements.Dialog()
+      .setTitle('Calling')
+      .addButton('reject', cancel)
+      .appendButtons()
+      .getElement();
+
+    const dialogHTML = document.getElementById('dialog');
+    dialogHTML.innerHTML = '';
+    dialogHTML.appendChild(callDialog);
+  }
+
   showIncomingCallingDialog(callType: CALL_TYPE, accept: () => void, reject: () => void) {
     assert.oneOf(callType, Object.values(CALL_TYPE));
 
