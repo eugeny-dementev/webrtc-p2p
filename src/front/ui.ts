@@ -101,7 +101,7 @@ export class UI {
       this.showDialog(infoDialog);
 
       setTimeout(() => {
-        removeAllDialogs()
+        this.removeDialog()
       }, 4000);
     }
   }
@@ -119,7 +119,7 @@ export class UI {
       this.showVideoCallElements();
     }
 
-    removeAllDialogs();
+    this.removeDialog();
   }
 
   private showChatCallElements() {
@@ -127,7 +127,7 @@ export class UI {
     this.show('new_message');
 
     // block panel until chat is ended
-    disableDashboard();
+    this.disableDashboard();
   }
 
   private showVideoCallElements() {
@@ -137,7 +137,7 @@ export class UI {
     this.show('new_message')
 
     // block panel until call is ended
-    disableDashboard();
+    this.disableDashboard();
   }
 
   private showDialog(dialog: elements.Dialog) {
@@ -168,140 +168,20 @@ export class UI {
       element.classList.remove('display_none');
     }
   }
-}
 
-export function showCallingDialog(cancelCallHandler) {
-  assert.isFunction(cancelCallHandler, 'cancelCallHandler should be a function');
+  private enableDashboard() {
+    const dashboardBlocker = document.getElementById('dashboard_blur')
 
-  const callDialog = new elements.Dialog()
-    .setTitle('Calling')
-    .addButton('reject', cancelCallHandler)
-    .appendButtons()
-    .getElement();
-
-  const dialogHTML = document.getElementById('dialog');
-  dialogHTML.innerHTML = '';
-  dialogHTML.appendChild(callDialog);
-}
-
-export function removeAllDialogs() {
-  const dialogHTML = document.getElementById('dialog');
-  dialogHTML.innerHTML = '';
-}
-
-export function showInfoDialog(preOfferAnswer) {
-  assert.oneOf(preOfferAnswer, Object.values(PreOfferAnswer));
-
-  let infoDialog = new elements.Dialog();
-  let showDialog = false;
-
-  switch (preOfferAnswer) {
-    case PreOfferAnswer.CallRejected: {
-      infoDialog
-        .setTitle('Call rejected')
-        .setDescription('Callee rejected your call')
-      showDialog = true
-
-      break;
+    if (!dashboardBlocker.classList.contains('display_none')) {
+      this.hide('dashboard_blur');
     }
-    case PreOfferAnswer.CalleeNotFound: {
-      infoDialog
-        .setTitle('Call not found')
-        .setDescription('Please check provided personal code')
-      showDialog = true
+  }
 
-      break;
+  disableDashboard() {
+    const dashboardBlocker = document.getElementById('dashboard_blur')
+
+    if (dashboardBlocker.classList.contains('display_none')) {
+      this.show('dashboard_blur');
     }
-    case PreOfferAnswer.CalleeUnavailable: {
-      infoDialog
-        .setTitle('Call is not possible')
-        .setDescription('Probably callee is busy. Please try again later')
-      showDialog = true
-
-      break;
-    }
-    default: throw new TypeError('Unexpected preOfferAnswer ' + preOfferAnswer);
-  }
-
-  if (showDialog) {
-    const dialogHTML = document.getElementById('dialog');
-    dialogHTML.innerHTML = '';
-    dialogHTML.appendChild(infoDialog.getElement());
-
-    setTimeout(() => {
-      removeAllDialogs()
-    }, 4000);
-  }
-}
-
-export function showCallElements(callType) {
-  assert.oneOf(callType, [CALL_TYPE.PersonalChat, CALL_TYPE.PersonalCall]);
-
-  console.log('showCallElements(callType)', callType);
-
-  if (callType === CALL_TYPE.PersonalChat) {
-    showChatCallElements();
-  }
-
-  if (callType === CALL_TYPE.PersonalCall) {
-    showVideoCallElements();
-  }
-
-  removeAllDialogs();
-}
-
-export function showChatCallElements() {
-  const chatButtonContainer = document.getElementById('finish_chat_button_container');
-  showElement(chatButtonContainer);
-
-  const newMessageInput = document.getElementById('new_message');
-  showElement(newMessageInput);
-
-  // block panel until chat is ended
-  disableDashboard();
-}
-
-export function showVideoCallElements() {
-  const callButtons = document.getElementById('call_buttons');
-  showElement(callButtons);
-
-  const videoPlaceholder = document.getElementById('videos_placeholder');
-  hideElement(videoPlaceholder);
-
-  const remoteVideo = document.getElementById('remote_video');
-  showElement(remoteVideo);
-
-  const newMessageInput = document.getElementById('new_message');
-  showElement(newMessageInput);
-
-  // block panel until call is ended
-  disableDashboard();
-}
-
-export function enableDashboard() {
-  const dashboardBlocker = document.getElementById('dashboard_blur')
-
-  if (!dashboardBlocker.classList.contains('display_none')) {
-    hideElement(dashboardBlocker);
-  }
-}
-
-export function disableDashboard() {
-  const dashboardBlocker = document.getElementById('dashboard_blur')
-
-  if (dashboardBlocker.classList.contains('display_none')) {
-    showElement(dashboardBlocker);
-  }
-}
-
-export function hideElement(element) {
-  if (!element.classList.contains('display_none')) {
-    element.classList.add('display_none');
-  }
-}
-
-export function showElement(element) {
-  if (element.classList.contains('display_none')) {
-    element.classList.remove('display_none');
   }
 }
