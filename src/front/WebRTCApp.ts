@@ -41,6 +41,7 @@ export class WebRTCApp {
 
     this.ui.registerButtonHandler('personal_code_chat_button', () => {
       const code = this.ui.getInputValue('personal_code_input')
+
       this.store.targetSocketId = code;
 
       this.callerHandler.emitPreOffer(code, CALL_TYPE.PersonalChat);
@@ -55,5 +56,6 @@ export class WebRTCApp {
     const mediaStream = await this.devices.getLocalStream();
 
     this.store.localStream = mediaStream;
+    this.ui.setLocalStream(mediaStream);
   }
 }
