@@ -48,6 +48,7 @@ export class CallerEventsHandler {
       case PreOfferAnswer.CalleeNotFound:
       case PreOfferAnswer.CallRejected: {
         this.ui.showInfoDialog(preOfferAnswer);
+        this.store.targetSocketId = undefined;
         break;
       }
       case PreOfferAnswer.CallAccepted: {
