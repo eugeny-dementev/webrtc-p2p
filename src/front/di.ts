@@ -4,6 +4,7 @@ import { CalleeEventsHandler } from "./CalleeEventsHandler";
 import { CalleeSignaling } from "./CalleeSignaling";
 import { CallerEventsHandler } from "./CallerEventsHandler";
 import { CallerSignaling } from "./CallerSignaling";
+import { Devices } from "./Devices";
 import { Store } from "./store";
 import { TOKEN } from "./tokens";
 import { UI } from "./ui";
@@ -14,6 +15,11 @@ export const container = new Container();
 container
   .bind<Store>(TOKEN.Store)
   .to(Store)
+  .inSingletonScope();
+
+container
+  .bind<Devices>(TOKEN.Devices)
+  .to(Devices)
   .inSingletonScope();
 
 container
