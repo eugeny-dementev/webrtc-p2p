@@ -4,9 +4,22 @@ import { assert } from "../common/assert";
 import { CALL_TYPE, frontToBack, SIGNALING_EVENT } from "../common/constants";
 import { PreAnswerForCaller, PreOfferFromCaller } from "../common/types";
 import { TOKEN } from "./tokens";
+
 @injectable()
 export class CallerSignaling {
   constructor(@inject(TOKEN.Socket) private readonly socket: Socket) { }
+
+  emitIceCandidateToCallee(candidate: RTCIceCandidate, targetSocketId: Socket['id']) {
+    assert.isString(targetSocketId, 'targetSocketId should be a non-empty Socket["id"] string');
+
+    const payload = {
+      ...frontToBack,
+      iceCandidate: candidate,
+      targetSocketId,
+    };
+
+    this.socket.emit(SIGNALING_EVENT.ICE_CANDIDATE_FROM_CALLER, payload);
+  }
 
   emitPreOfferToCallee(callType: CALL_TYPE, targetSocketId: Socket['id']) {
     assert.oneOf(callType, Object.values(CALL_TYPE));
