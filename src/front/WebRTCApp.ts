@@ -4,6 +4,7 @@ import { assert } from '../common/assert';
 import { CALL_TYPE } from '../common/constants';
 import { CalleeEventsHandler } from './CalleeEventsHandler';
 import { CallerEventsHandler } from './CallerEventsHandler';
+import { Devices } from './Devices';
 import { Store } from './store';
 import { TOKEN } from './tokens';
 import { UI } from './ui';
@@ -12,6 +13,7 @@ import { UI } from './ui';
 export class WebRTCApp {
   constructor(
     @inject(TOKEN.Store) private readonly store: Store,
+    @inject(TOKEN.Devices) private readonly devices: Devices,
     @inject(TOKEN.Socket) private readonly socket: Socket,
     @inject(TOKEN.CalleeEventsHandler) private readonly calleeHandler: CalleeEventsHandler,
     @inject(TOKEN.CallerEventsHandler) private readonly callerHandler: CallerEventsHandler,
@@ -48,5 +50,9 @@ export class WebRTCApp {
 
       this.callerHandler.emitPreOffer(code, CALL_TYPE.PersonalCall);
     });
+
+    const mediaStream = await this.devices.getLocalStream();
+
+    this.store.localStream = mediaStream;
   }
 }
