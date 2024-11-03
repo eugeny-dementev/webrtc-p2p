@@ -34,6 +34,16 @@ export class UI {
     return input.value;
   }
 
+  setLocalStream(mediaStream: MediaStream) {
+    const localVideo = document.getElementById('local_video') as HTMLVideoElement;
+
+    localVideo.addEventListener('loadedmetadata', () => {
+      localVideo.play();
+    })
+
+    localVideo.srcObject = mediaStream;
+  }
+
 
   showCallingDialog(cancel: HTMLElement['onclick']) {
     assert.isFunction(cancel, 'cancelCallHandler should be a function');
