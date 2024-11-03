@@ -1,10 +1,14 @@
 import { injectable } from "inversify";
+import { Socket } from "socket.io-client";
 import { assert } from "../common/assert";
 import { CALL_TYPE } from "../common/constants";
 
 type State = {
-  socketId: string;
-  callerSocketId: string | undefined; // @FIXME: add cleanup after call is ended
+  // local socket id
+  socketId: Socket['id'];
+  // id of incoming caller socket id
+  callerSocketId: Socket['id'] | undefined; // @FIXME: add cleanup after call is ended
+  targetSocketId: Socket['id'] | undefined // @FIXME: add cleanup after call is ended
   callType: CALL_TYPE | undefined; // @FIXME: add cleanup after call is ended
 
   localStream: MediaStream | null;
@@ -23,6 +27,7 @@ export class Store {
   private state: State = Object.freeze({
     socketId: null,
     callerSocketId: undefined,
+    targetSocketId: undefined,
     callType: undefined,
 
     localStream: null,
@@ -50,6 +55,12 @@ export class Store {
   }
   get callerSocketId() {
     return this.state.callerSocketId;
+  }
+  set targetSocketId(value: string | undefined) {
+    this.state = Object.freeze({ ...this.state, targetSocketId: value })
+  }
+  get targetSocketId() {
+    return this.state.targetSocketId;
   }
   set callType(value: CALL_TYPE | undefined) {
     this.state = Object.freeze({ ...this.state, callType: value })
