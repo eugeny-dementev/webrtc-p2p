@@ -36,6 +36,10 @@ export const backToFront: BackToFront = {
 export const SIGNALING_EVENT = {
   PRE_OFFER_FROM_CALLER: event('pre-offer').from('front').to('back'),
   PRE_OFFER_FOR_CALLEE: event('pre-offer').from('back').to('front'),
+
   PRE_ANSWER_FROM_CALLEE: event('pre-offer-answer').from('front').to('back'),
   PRE_ANSWER_FOR_CALLER: event('pre-offer-answer').from('back').to('front'),
+
+  ICE_CANDIDATE_FROM_CALLER: event('ice-candidate').from('front').to('back'),
+  ICE_CANDIDATE_FOR_CALLEE: event('ice-candidate').from('back').to('front'),
 };
