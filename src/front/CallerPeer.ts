@@ -1,4 +1,5 @@
 import { inject, injectable } from "inversify";
+import { assert } from "../common/assert";
 import { CALL_TYPE } from "../common/constants";
 import { CallerSignaling } from "./CallerSignaling";
 import { Store } from "./store";
@@ -48,6 +49,8 @@ export class CallerPeer {
 
   private onicecandidate(event: RTCPeerConnectionIceEvent) {
     if (event.candidate) {
+      assert.isInstanceOf(event.candidate, RTCIceCandidate, 'event.candidate must be a RTCIceCandidate');
+
       this
         .callerSignaling
         .emitIceCandidateToCallee(event.candidate, this.store.callerSocketId)
@@ -61,6 +64,9 @@ export class CallerPeer {
   }
 
   private ontrack(event: MediaStreamTrackEvent) {
+    assert.isInstanceOf(this.store.remoteStream, MediaStream, 'Media stream must exist to add media tracks to it');
+    assert.isInstanceOf(event.track, MediaStreamTrack, 'event.track must be a MediaStreamTrack');
+
     this.store.remoteStream.addTrack(event.track);
   }
 }
