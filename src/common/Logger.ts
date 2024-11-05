@@ -13,7 +13,7 @@ type ErrorMeta = {
 
 type ErrorMethod = (message: string, meta: ErrorMeta) => void;
 
-interface ILogger {
+export interface ILogger {
   error: ErrorMethod
   warn: LogMethod
   info: LogMethod
