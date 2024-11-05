@@ -1,3 +1,4 @@
+import { Socket } from "socket.io-client";
 import { CALL_TYPE, PreOfferAnswer } from "./constants";
 
 export interface FrontToBack {
@@ -31,3 +32,22 @@ export interface PreAnswerForCaller extends BackToFront {
   callerSocketId: string,
 }
 
+export interface OfferFromCaller extends FrontToBack {
+  offer: RTCSessionDescriptionInit,
+  calleeSocketId: Socket['id'],
+}
+// caller(OfferFromCaller) => back(OfferFromCaller->OfferForCallee) => callee(OfferForCallee)
+export interface OfferForCallee extends BackToFront {
+  offer: RTCSessionDescriptionInit,
+  callerSocketId: Socket['id'],
+}
+
+export interface AnswerFromCallee extends FrontToBack {
+  answer: RTCSessionDescriptionInit,
+  callerSocketId: Socket['id'],
+}
+// callee(AnswerFromCallee) => back(AnswerFromCallee->AnswerForCaller) => caller(AnswerForCaller)
+export interface AnswerForCaller extends BackToFront {
+  answer: RTCSessionDescriptionInit,
+  calleeSocketId: Socket['id'],
+}
