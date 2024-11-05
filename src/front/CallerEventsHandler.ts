@@ -7,6 +7,7 @@ import { CallerSignaling } from "./CallerSignaling";
 import { Store } from "./store";
 import { TOKEN } from "./tokens";
 import { UI } from "./ui";
+import { ILogger } from "../common/Logger";
 
 @injectable()
 export class CallerEventsHandler {
@@ -15,6 +16,7 @@ export class CallerEventsHandler {
     @inject(TOKEN.Peer) private readonly peer: Peer,
     @inject(TOKEN.Store) private readonly store: Store,
     @inject(TOKEN.UI) private readonly ui: UI,
+    @inject(TOKEN.Logger) private readonly logger: ILogger,
   ) { }
 
   emitPreOffer(calleePersonalCode: string, callType: CALL_TYPE) {
@@ -35,18 +37,25 @@ export class CallerEventsHandler {
   }
 
   emitOfferToCallee() {
+    console.log('State:', this.store.get());
     assert.isString(this.store.targetSocketId, 'store.targetSocketId should be set for sending offer');
 
-    const offer = {};
-
-    this.caller.emitOfferToCallee(offer, this.store.targetSocketId);
+    this.peer
+      .createOffer()
+      .then((offer) => {
+        this.caller.emitOfferToCallee(offer, this.store.targetSocketId);
+      })
+      .catch((error) => {
+        this.peer.close();
+        this.logger.error('Failed to create offer', { error });
+      });
   }
 
   subscribe() {
     this.caller.subscribeToPreAnswerFromCallee((payload: PreAnswerForCaller) => {
       this.handlePreAnswer(payload);
     })
-    this.caller.subscribeToAnswerFromCallee((payload) =>{
+    this.caller.subscribeToAnswerFromCallee((payload) => {
       this.handleAnswer(payload);
     })
   }
