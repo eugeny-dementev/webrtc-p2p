@@ -42,4 +42,13 @@ export const SIGNALING_EVENT = {
 
   ICE_CANDIDATE_FROM_CALLER: event('ice-candidate').from('front').to('back'),
   ICE_CANDIDATE_FOR_CALLEE: event('ice-candidate').from('back').to('front'),
+
+  ICE_CANDIDATE_FROM_CALLEE: event('ice-candidate').from('front').to('back'),
+  ICE_CANDIDATE_FOR_CALLER: event('ice-candidate').from('back').to('front'),
+
+  OFFER_FROM_CALLER: event('offer').from('front').to('back'),
+  OFFER_FOR_CALLEE: event('offer').from('back').to('front'),
+
+  ANSWER_FROM_CALLEE: event('offer-answer').from('front').to('back'),
+  ANSWER_FOR_CALLER: event('offer-answer').from('back').to('front'),
 };
