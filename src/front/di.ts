@@ -4,6 +4,7 @@ import { ILogger, PrettyLogger } from "../common/Logger";
 import { CalleeEventsHandler } from "./CalleeEventsHandler";
 import { CalleeSignaling } from "./CalleeSignaling";
 import { CallerEventsHandler } from "./CallerEventsHandler";
+import { CallerPeer } from "./CallerPeer";
 import { CallerSignaling } from "./CallerSignaling";
 import { Devices } from "./Devices";
 import { Store } from "./store";
@@ -44,6 +45,11 @@ container
 container
   .bind<CallerSignaling>(TOKEN.CallerSignaling)
   .to(CallerSignaling)
+  .inSingletonScope();
+
+container
+  .bind<CallerPeer>(TOKEN.CallerPeer)
+  .to(CallerPeer)
   .inSingletonScope();
 
 container
