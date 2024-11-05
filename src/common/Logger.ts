@@ -1,4 +1,5 @@
 import { injectable } from "inversify";
+import yamlifyObject from 'yamlify-object'
 
 type Meta = {
   [key: string]: any
@@ -22,14 +23,22 @@ interface ILogger {
 @injectable()
 export class PrettyLogger implements ILogger {
   error(message: string, meta: ErrorMeta) {
+    this.log('error', message, meta);
   }
 
   warn(message: string, meta: Meta) {
+    this.log('warn', message, meta);
   }
 
   info(message: string, meta: Meta) {
+    this.log('info', message, meta);
   }
 
   debug(message: string, meta: Meta) {
+    this.log('debug', message, meta);
+  }
+
+  log(level: 'error' | 'warn' | 'info' | 'debug', message: string, meta: Meta) {
+    console.log(`[${level}] - ${message}\n${yamlifyObject(meta)}`);
   }
 }
