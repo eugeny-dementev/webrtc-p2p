@@ -2,7 +2,7 @@ import { inject, injectable } from "inversify";
 import { assert } from "../common/assert";
 import { CALL_TYPE, PreOfferAnswer } from "../common/constants";
 import { PreAnswerForCaller } from "../common/types";
-import { CallerPeer } from "./CallerPeer";
+import { Peer } from "./Peer";
 import { CallerSignaling } from "./CallerSignaling";
 import { Store } from "./store";
 import { TOKEN } from "./tokens";
@@ -12,7 +12,7 @@ import { UI } from "./ui";
 export class CallerEventsHandler {
   constructor(
     @inject(TOKEN.CallerSignaling) private readonly caller: CallerSignaling,
-    @inject(TOKEN.CallerPeer) private readonly callerPeer: CallerPeer,
+    @inject(TOKEN.Peer) private readonly peer: Peer,
     @inject(TOKEN.Store) private readonly store: Store,
     @inject(TOKEN.UI) private readonly ui: UI,
   ) { }
@@ -56,7 +56,7 @@ export class CallerEventsHandler {
       case PreOfferAnswer.CallAccepted: {
         this.ui.showCallElements(this.store.callType);
         this.ui.removeDialog();
-        this.callerPeer.init();
+        this.peer.init();
         break;
       };
       default: {

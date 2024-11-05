@@ -15,7 +15,7 @@ const defaultConfiguration: RTCConfiguration = {
 }
 
 @injectable()
-export class CallerPeer {
+export class Peer {
   private connection: RTCPeerConnection;
 
   constructor(

@@ -35,6 +35,7 @@ export class CalleeEventsHandler {
         () => {
           this.callee.emitPreAnswerToCaller(PreOfferAnswer.CallAccepted);
           this.ui.showCallElements(payload.callType);
+
         },
         () => {
           this.callee.emitPreAnswerToCaller(PreOfferAnswer.CallRejected);
