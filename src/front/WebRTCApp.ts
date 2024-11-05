@@ -50,6 +50,8 @@ export class WebRTCApp {
     this.ui.registerButtonHandler('personal_code_video_button', () => {
       const code = this.ui.getInputValue('personal_code_input')
 
+      this.store.targetSocketId = code;
+
       this.callerHandler.emitPreOffer(code, CALL_TYPE.PersonalCall);
     });
 
