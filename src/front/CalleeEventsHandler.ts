@@ -21,6 +21,9 @@ export class CalleeEventsHandler {
     this.callee.subscribeToPreOfferFromCaller((payload: PreOfferForCallee) => {
       this.handlePreOffer(payload);
     })
+    this.callee.subscribeToOfferFromCaller((payload) => {
+      this.handleOffer(payload);
+    })
   }
 
   handlePreOffer(payload: PreOfferForCallee) {
@@ -44,5 +47,12 @@ export class CalleeEventsHandler {
         },
       );
     }
+  }
+
+  handleOffer(payload) {
+    this.emitAnswerToCaller(payload);
+  }
+  emitAnswerToCaller(answer) {
+    this.callee.emitAnswerToCaller(answer);
   }
 }

@@ -34,9 +34,20 @@ export class CallerEventsHandler {
     }
   }
 
+  emitOfferToCallee() {
+    assert.isString(this.store.targetSocketId, 'store.targetSocketId should be set for sending offer');
+
+    const offer = {};
+
+    this.caller.emitOfferToCallee(offer, this.store.targetSocketId);
+  }
+
   subscribe() {
     this.caller.subscribeToPreAnswerFromCallee((payload: PreAnswerForCaller) => {
       this.handlePreAnswer(payload);
+    })
+    this.caller.subscribeToAnswerFromCallee((payload) =>{
+      this.handleAnswer(payload);
     })
   }
 
@@ -57,6 +68,7 @@ export class CallerEventsHandler {
         this.ui.showCallElements(this.store.callType);
         this.ui.removeDialog();
         this.peer.init();
+        this.emitOfferToCallee();
         break;
       };
       default: {
@@ -64,6 +76,9 @@ export class CallerEventsHandler {
         throw new TypeError('Improsible pre offer answer value' + preOfferAnswer);
       }
     }
+  }
+
+  handleAnswer(payload) {
   }
 }
 

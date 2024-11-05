@@ -46,6 +46,26 @@ export class CallerSignaling {
     });
   }
 
+  emitOfferToCallee(offer, targetSocketId: Socket['id']) {
+    const payload = {
+      targetSocketId,
+      offer,
+      ...frontToBack
+    }
+
+    this.socket.emit(SIGNALING_EVENT.OFFER_FROM_CALLER, payload);
+  }
+  subscribeToAnswerFromCallee(callback: (payload)=> void) {
+    this.socket.on(SIGNALING_EVENT.ANSWER_FOR_CALLER, (payload) =>{
+      assert.is(payload.from, 'back', 'handlePreOffer should always to receive events from the back');
+      assert.is(payload.to, 'front', 'handlePreOffer should always to receive events targeted to the front');
+
+      console.log(`Received ${SIGNALING_EVENT.PRE_ANSWER_FOR_CALLER}`, payload);
+
+      return callback(payload);
+    });
+  }
+
   // emitOfferToCallee(data) {
   //   const payload = {
   //     ...frontToBack

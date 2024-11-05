@@ -36,6 +36,26 @@ export class CalleeSignaling {
     this.socket.emit(SIGNALING_EVENT.PRE_ANSWER_FROM_CALLEE, payload);
   }
 
-  // onOfferFromCaller(callback) { }
-  // emitAnswerToCaller(data) { }
+  subscribeToOfferFromCaller(callback: (payload) => void) {
+    this.socket.on(SIGNALING_EVENT.OFFER_FOR_CALLEE, (payload) => {
+      assert.is(payload.from, 'back', 'handlePreOffer should always to receive events from the back');
+      assert.is(payload.to, 'front', 'handlePreOffer should always to receive events targeted to the front');
+      assert.isFalse(payload.callerSocketId === this.store.socketId, 'PreOffer should never came from the same socket id');
+
+      console.log(`Received ${SIGNALING_EVENT.OFFER_FOR_CALLEE}`, payload);
+
+      return callback(payload);
+    });
+  }
+  emitAnswerToCaller(answer) {
+    const payload = {
+      ...frontToBack,
+      targetSocketId: this.store.callerSocketId,
+      answer: {},
+    }
+
+    console.log(`Emitting ${SIGNALING_EVENT.ANSWER_FROM_CALLEE}`, payload);
+
+    this.socket.emit(SIGNALING_EVENT.ANSWER_FROM_CALLEE, payload);
+  }
 }
