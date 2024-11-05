@@ -43,6 +43,14 @@ export class CallerPeer {
     }
   }
 
+  end() {
+    this.connection.onicecandidate = undefined;
+    this.connection.onconnectionstatechange = undefined;
+    this.connection.ontrack = undefined;
+
+    this.connection = undefined;
+  }
+
   private addTracks() {
     for (const mediaTrack of this.store.localStream.getTracks()) {
       this.connection.addTrack(mediaTrack);
