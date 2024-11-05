@@ -43,10 +43,12 @@ export class CallerPeer {
     }
   }
 
-  end() {
+  close() {
     this.connection.onicecandidate = undefined;
     this.connection.onconnectionstatechange = undefined;
     this.connection.ontrack = undefined;
+
+    this.connection.close();
 
     this.connection = undefined;
   }
