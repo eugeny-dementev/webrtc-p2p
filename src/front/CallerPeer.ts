@@ -1,6 +1,7 @@
 import { inject, injectable } from "inversify";
 import { assert } from "../common/assert";
 import { CALL_TYPE } from "../common/constants";
+import { ILogger } from "../common/Logger";
 import { CallerSignaling } from "./CallerSignaling";
 import { Store } from "./store";
 import { TOKEN } from "./tokens";
@@ -20,6 +21,7 @@ export class CallerPeer {
   constructor(
     @inject(TOKEN.CallerSignaling) private readonly callerSignaling: CallerSignaling,
     @inject(TOKEN.Store) private readonly store: Store,
+    @inject(TOKEN.Logger) private readonly logger: ILogger,
   ) {
     this.ontrack = this.ontrack.bind(this);
     this.onicecandidate = this.onicecandidate.bind(this);
@@ -59,7 +61,9 @@ export class CallerPeer {
 
   private onconnectionstatechange() {
     if (this.connection.connectionState === 'connected') {
-      console.log('Successfully connected to callee peer');
+      this.logger.info('Successfully connected to callee peer', this.connection);
+    } else {
+      this.logger.debug('Connection state changed', this.connection)
     }
   }
 
