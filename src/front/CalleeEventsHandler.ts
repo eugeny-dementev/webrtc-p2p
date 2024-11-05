@@ -3,6 +3,7 @@ import { assert } from "../common/assert";
 import { CALL_TYPE, PreOfferAnswer } from "../common/constants";
 import { PreOfferForCallee } from "../common/types";
 import { CalleeSignaling } from "./CalleeSignaling";
+import { Peer } from "./Peer";
 import { Store } from "./store";
 import { TOKEN } from "./tokens";
 import { UI } from "./ui";
@@ -11,6 +12,7 @@ import { UI } from "./ui";
 export class CalleeEventsHandler {
   constructor(
     @inject(TOKEN.CalleeSignaling) private readonly callee: CalleeSignaling,
+    @inject(TOKEN.Peer) private readonly peer: Peer,
     @inject(TOKEN.Store) private readonly store: Store,
     @inject(TOKEN.UI) private readonly ui: UI,
   ) { }
@@ -35,7 +37,7 @@ export class CalleeEventsHandler {
         () => {
           this.callee.emitPreAnswerToCaller(PreOfferAnswer.CallAccepted);
           this.ui.showCallElements(payload.callType);
-
+          this.peer.init();
         },
         () => {
           this.callee.emitPreAnswerToCaller(PreOfferAnswer.CallRejected);
