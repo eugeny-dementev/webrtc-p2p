@@ -22,6 +22,13 @@ export interface ILogger {
 
 @injectable()
 export class PrettyLogger implements ILogger {
+  constructor(){
+    this.error = this.error.bind(this);
+    this.warn = this.warn.bind(this);
+    this.info = this.info.bind(this);
+    this.debug = this.debug.bind(this);
+  }
+
   error(message: string, meta: ErrorMeta) {
     this.log('error', message, meta);
   }
