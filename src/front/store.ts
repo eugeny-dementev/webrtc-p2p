@@ -41,6 +41,10 @@ export class Store {
     // callState: ?
   });
 
+  get() {
+    return this.state;
+  }
+
   // Connection
   set socketId(value: string) {
     assert.isString(value, 'socketId should be string');
