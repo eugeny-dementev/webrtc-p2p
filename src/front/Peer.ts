@@ -53,6 +53,13 @@ export class Peer {
     this.connection = undefined;
   }
 
+  async createOffer(): Promise<RTCSessionDescriptionInit> {
+    const offer = await this.connection.createOffer();
+    this.connection.setLocalDescription(offer);
+
+    return offer;
+  }
+
   private addTracks() {
     for (const mediaTrack of this.store.localStream.getTracks()) {
       this.connection.addTrack(mediaTrack);
