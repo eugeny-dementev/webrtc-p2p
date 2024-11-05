@@ -1,5 +1,6 @@
 import { Container } from "inversify";
 import { io, Socket } from "socket.io-client";
+import { ILogger, PrettyLogger } from "../common/Logger";
 import { CalleeEventsHandler } from "./CalleeEventsHandler";
 import { CalleeSignaling } from "./CalleeSignaling";
 import { CallerEventsHandler } from "./CallerEventsHandler";
@@ -11,6 +12,11 @@ import { UI } from "./ui";
 import { WebRTCApp } from "./WebRTCApp";
 
 export const container = new Container();
+
+container
+  .bind<ILogger>(TOKEN.Logger)
+  .to(PrettyLogger)
+  .inSingletonScope();
 
 container
   .bind<Store>(TOKEN.Store)

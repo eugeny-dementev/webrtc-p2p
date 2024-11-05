@@ -9,4 +9,5 @@ export const TOKEN = {
   CalleeEventsHandler: Symbol.for('CalleeEventsHandler'),
   CallerEventsHandler: Symbol.for('CallerEventsHandler'),
   Devices: Symbol.for('Devices'),
+  Logger: Symbol.for('Logger'),
 };
