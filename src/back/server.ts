@@ -79,6 +79,82 @@ io.on('connection', (socket) => {
     io.to(data.callerSocketId).emit(SIGNALING_EVENT.PRE_ANSWER_FOR_CALLER, payloadForCaller);
   });
 
+  socket.on(SIGNALING_EVENT.ICE_CANDIDATE_FROM_CALLER, (data) => {
+    const { targetSocketId, candidate } = data;
+
+    console.log(`Received ${SIGNALING_EVENT.ICE_CANDIDATE_FROM_CALLER} from ${socket.id}`, data);
+
+    if (!connectedPeers.has(targetSocketId)) {
+      console.log('Caller not found', targetSocketId);
+      return;
+    }
+
+    const payload = {
+      ...data,
+      from: 'back',
+      to: 'front',
+    }
+
+    io.to(targetSocketId).emit(SIGNALING_EVENT.ICE_CANDIDATE_FOR_CALLEE, payload);
+  });
+
+  socket.on(SIGNALING_EVENT.ICE_CANDIDATE_FROM_CALLEE, (data) => {
+    const { targetSocketId } = data;
+
+    console.log(`Received ${SIGNALING_EVENT.ICE_CANDIDATE_FROM_CALLEE} from ${socket.id}`, data);
+
+    if (!connectedPeers.has(targetSocketId)) {
+      console.log('Caller not found', targetSocketId);
+      return;
+    }
+
+    const payload = {
+      ...data,
+      from: 'back',
+      to: 'front',
+    }
+
+    io.to(targetSocketId).emit(SIGNALING_EVENT.ICE_CANDIDATE_FOR_CALLER, payload);
+  });
+
+  socket.on(SIGNALING_EVENT.OFFER_FROM_CALLER, (data) => {
+    const { targetSocketId } = data;
+
+    console.log(`Received ${SIGNALING_EVENT.OFFER_FROM_CALLER} from ${socket.id}`, data);
+
+    if (!connectedPeers.has(targetSocketId)) {
+      console.log('Caller not found', targetSocketId);
+      return;
+    }
+
+    const payload = {
+      ...data,
+      from: 'back',
+      to: 'front',
+    }
+
+    io.to(targetSocketId).emit(SIGNALING_EVENT.OFFER_FOR_CALLEE, payload);
+  });
+
+  socket.on(SIGNALING_EVENT.ANSWER_FROM_CALLEE, (data) => {
+    const { targetSocketId } = data;
+
+    console.log(`Received ${SIGNALING_EVENT.ANSWER_FROM_CALLEE} from ${socket.id}`, data);
+
+    if (!connectedPeers.has(targetSocketId)) {
+      console.log('Caller not found', targetSocketId);
+      return;
+    }
+
+    const payload = {
+      ...data,
+      from: 'back',
+      to: 'front',
+    }
+
+    io.to(targetSocketId).emit(SIGNALING_EVENT.ANSWER_FOR_CALLER, payload);
+  });
+
   socket.on('disconnect', () => {
     connectedPeers.delete(socket.id);
     console.log('user disconnected to Socket.IO server', socket.id);
