@@ -2,7 +2,7 @@ import { inject, injectable } from "inversify";
 import { Socket } from "socket.io-client";
 import { assert } from "../common/assert";
 import { frontToBack, PreOfferAnswer, SIGNALING_EVENT } from "../common/constants";
-import { AnswerForCaller, AnswerFromCallee, OfferForCallee, PreAnswerFromCallee, PreOfferForCallee } from "../common/types";
+import { AnswerFromCallee, IceCandidateBack, IceCandidateFront, OfferForCallee, PreAnswerFromCallee, PreOfferForCallee } from "../common/types";
 import { Store } from "./store";
 import { TOKEN } from "./tokens";
 
@@ -58,5 +58,28 @@ export class CalleeSignaling {
     console.log(`Emitting ${SIGNALING_EVENT.ANSWER_FROM_CALLEE}`, payload);
 
     this.socket.emit(SIGNALING_EVENT.ANSWER_FROM_CALLEE, payload);
+  }
+
+  subscribeToIceCandidatesFromCaller(callback: (payload: IceCandidateBack) => void) {
+    this.socket.on(SIGNALING_EVENT.ICE_CANDIDATE_FOR_CALLEE, (payload: IceCandidateBack) => {
+      assert.is(this.store.socketId, payload.targetSocketId, 'Should only receive candidate for current socket id');
+
+      console.log(`Received ${SIGNALING_EVENT.ICE_CANDIDATE_FOR_CALLEE}`, payload);
+
+      callback(payload);
+    })
+  }
+  emitIceCandidateToCaller(candidate: RTCIceCandidate, targetSocketId: Socket['id']) {
+    assert.isString(targetSocketId, 'targetSocketId should be a non-empty Socket["id"] string');
+
+    const payload: IceCandidateFront = {
+      ...frontToBack,
+      candidate,
+      targetSocketId,
+    };
+
+    console.log(`Emitting ${SIGNALING_EVENT.ICE_CANDIDATE_FROM_CALLEE}`, payload);
+
+    this.socket.emit(SIGNALING_EVENT.ICE_CANDIDATE_FROM_CALLEE, payload);
   }
 }
