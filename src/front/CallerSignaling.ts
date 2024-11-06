@@ -22,6 +22,8 @@ export class CallerSignaling {
       targetSocketId,
     };
 
+    console.log(`Emitting ${SIGNALING_EVENT.ICE_CANDIDATE_FROM_CALLER}`, payload);
+
     this.socket.emit(SIGNALING_EVENT.ICE_CANDIDATE_FROM_CALLER, payload);
   }
   subscribeToIceCandidatesFromCallee(callback: (payload: IceCandidateBack) => void) {
