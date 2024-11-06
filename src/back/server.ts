@@ -102,7 +102,9 @@ io.on('connection', (socket) => {
       to: 'front',
     }
 
-    console.log(`Emitting ${SIGNALING_EVENT.ICE_CANDIDATE_FOR_CALLEE} to ${data.targetSocketId}`, payload);
+    console.log(`Emitting ${SIGNALING_EVENT.ICE_CANDIDATE_FOR_CALLEE} to ${targetSocketId}`, payload);
+
+    assert.isFalse(targetSocketId === payload.targetSocketId, 'should never emit to the same socketId as the source of event');
 
     io.to(targetSocketId).emit(SIGNALING_EVENT.ICE_CANDIDATE_FOR_CALLEE, payload);
   });
@@ -124,7 +126,9 @@ io.on('connection', (socket) => {
       to: 'front',
     }
 
-    console.log(`Emitting ${SIGNALING_EVENT.ICE_CANDIDATE_FOR_CALLER} to ${data.targetSocketId}`, payload);
+    console.log(`Emitting ${SIGNALING_EVENT.ICE_CANDIDATE_FOR_CALLER} to ${targetSocketId}`, payload);
+
+    assert.isFalse(targetSocketId === payload.targetSocketId, 'should never emit to the same socketId as the source of event');
 
     io.to(targetSocketId).emit(SIGNALING_EVENT.ICE_CANDIDATE_FOR_CALLER, payload);
   });
