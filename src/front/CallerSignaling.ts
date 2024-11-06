@@ -2,7 +2,7 @@ import { inject, injectable } from "inversify";
 import { Socket } from "socket.io-client";
 import { assert } from "../common/assert";
 import { CALL_TYPE, frontToBack, SIGNALING_EVENT } from "../common/constants";
-import { AnswerForCaller, OfferFromCaller, PreAnswerForCaller, PreOfferFromCaller } from "../common/types";
+import { AnswerForCaller, IceCandidateFront, OfferFromCaller, PreAnswerForCaller, PreOfferFromCaller } from "../common/types";
 import { Store } from "./store";
 import { TOKEN } from "./tokens";
 
@@ -16,9 +16,9 @@ export class CallerSignaling {
   emitIceCandidateToCallee(candidate: RTCIceCandidate, targetSocketId: Socket['id']) {
     assert.isString(targetSocketId, 'targetSocketId should be a non-empty Socket["id"] string');
 
-    const payload = {
+    const payload: IceCandidateFront = {
       ...frontToBack,
-      iceCandidate: candidate,
+      candidate,
       targetSocketId,
     };
 
@@ -57,15 +57,18 @@ export class CallerSignaling {
       ...frontToBack,
     }
 
+    console.log(`Emitting ${SIGNALING_EVENT.OFFER_FROM_CALLER}`, payload);
+
     this.socket.emit(SIGNALING_EVENT.OFFER_FROM_CALLER, payload);
   }
   subscribeToAnswerFromCallee(callback: (payload: AnswerForCaller) => void) {
-    this.socket.on(SIGNALING_EVENT.ANSWER_FOR_CALLER, (payload) => {
+    this.socket.on(SIGNALING_EVENT.ANSWER_FOR_CALLER, (payload: AnswerForCaller) => {
       assert.is(payload.from, 'back', 'handlePreOffer should always to receive events from the back');
       assert.is(payload.to, 'front', 'handlePreOffer should always to receive events targeted to the front');
       assert.is(payload.calleeSocketId, this.store.targetSocketId, 'answer should be received from this.store.targetSocketId');
+      assert.isFalse(payload.answer === undefined, 'answer should be received');
 
-      console.log(`Received ${SIGNALING_EVENT.PRE_ANSWER_FOR_CALLER}`, payload);
+      console.log(`Received ${SIGNALING_EVENT.ANSWER_FOR_CALLER}`, payload);
 
       callback(payload);
     });

@@ -1,7 +1,8 @@
 import { inject, injectable } from "inversify";
 import { assert } from "../common/assert";
 import { CALL_TYPE, PreOfferAnswer } from "../common/constants";
-import { PreOfferForCallee } from "../common/types";
+import { ILogger } from "../common/Logger";
+import { OfferForCallee, PreOfferForCallee } from "../common/types";
 import { CalleeSignaling } from "./CalleeSignaling";
 import { Peer } from "./Peer";
 import { Store } from "./store";
@@ -15,6 +16,7 @@ export class CalleeEventsHandler {
     @inject(TOKEN.Peer) private readonly peer: Peer,
     @inject(TOKEN.Store) private readonly store: Store,
     @inject(TOKEN.UI) private readonly ui: UI,
+    @inject(TOKEN.Logger) private readonly logger: ILogger,
   ) { }
 
   subscribe() {
@@ -49,10 +51,14 @@ export class CalleeEventsHandler {
     }
   }
 
-  handleOffer(payload) {
-    this.emitAnswerToCaller(payload);
-  }
-  emitAnswerToCaller(answer) {
-    this.callee.emitAnswerToCaller(answer);
+  handleOffer(payload: OfferForCallee) {
+    this.peer
+      .createAnswer(payload.offer)
+      .then((answer) => {
+        this.callee.emitAnswerToCaller(answer)
+      })
+      .catch((error) => this.logger.error('Failed to create answer to the offer', {
+        error,
+      }));
   }
 }
