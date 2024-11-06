@@ -62,7 +62,7 @@ export class CalleeSignaling {
 
   subscribeToIceCandidatesFromCaller(callback: (payload: IceCandidateBack) => void) {
     this.socket.on(SIGNALING_EVENT.ICE_CANDIDATE_FOR_CALLEE, (payload: IceCandidateBack) => {
-      assert.is(this.store.socketId, payload.targetSocketId, 'Should only receive candidate for current socket id');
+      assert.isFalse(this.store.socketId === payload.targetSocketId, 'Should only receive candidate from caller');
 
       console.log(`Received ${SIGNALING_EVENT.ICE_CANDIDATE_FOR_CALLEE}`, payload);
 
