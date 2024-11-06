@@ -2,7 +2,7 @@ import { inject, injectable } from "inversify";
 import { Socket } from "socket.io-client";
 import { assert } from "../common/assert";
 import { CALL_TYPE, frontToBack, SIGNALING_EVENT } from "../common/constants";
-import { AnswerForCaller, IceCandidateFront, OfferFromCaller, PreAnswerForCaller, PreOfferFromCaller } from "../common/types";
+import { AnswerForCaller, IceCandidateBack, IceCandidateFront, OfferFromCaller, PreAnswerForCaller, PreOfferFromCaller } from "../common/types";
 import { Store } from "./store";
 import { TOKEN } from "./tokens";
 
@@ -23,6 +23,15 @@ export class CallerSignaling {
     };
 
     this.socket.emit(SIGNALING_EVENT.ICE_CANDIDATE_FROM_CALLER, payload);
+  }
+  subscribeToIceCandidatesFromCallee(callback: (payload: IceCandidateBack) => void) {
+    this.socket.on(SIGNALING_EVENT.ICE_CANDIDATE_FOR_CALLER, (payload: IceCandidateBack) =>{
+      assert.is(this.store.socketId, payload.targetSocketId, 'Should only receive candidate for current socket id');
+
+      console.log(`Received ${SIGNALING_EVENT.ICE_CANDIDATE_FOR_CALLER}`, payload);
+
+      callback(payload);
+    })
   }
 
   emitPreOfferToCallee(callType: CALL_TYPE, calleeSocketId: Socket['id']) {
@@ -73,12 +82,4 @@ export class CallerSignaling {
       callback(payload);
     });
   }
-
-  // emitOfferToCallee(data) {
-  //   const payload = {
-  //     ...frontToBack
-  //   }
-  // }
-  // onAnswerFromCallee(callback) {
-  // }
 }
