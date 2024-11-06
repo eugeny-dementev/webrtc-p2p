@@ -32,6 +32,17 @@ export interface PreAnswerForCaller extends BackToFront {
   callerSocketId: string,
 }
 
+export interface IceCandidateFront extends FrontToBack {
+  candidate: RTCIceCandidate,
+  targetSocketId: Socket['id'],
+}
+// front(IceCandidateFront) => back(IceCandidateFront->IceCandidateBack) => front(IceCandidateBack)
+// targetSocketId switched on the backend: targetSocketId = socket.id
+export interface IceCandidateBack extends BackToFront {
+  candidate: RTCIceCandidate,
+  targetSocketId: Socket['id'],
+}
+
 export interface OfferFromCaller extends FrontToBack {
   offer: RTCSessionDescriptionInit,
   calleeSocketId: Socket['id'],
