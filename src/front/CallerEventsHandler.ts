@@ -87,7 +87,12 @@ export class CallerEventsHandler {
     }
   }
 
-  handleAnswer(payload) {
+  handleAnswer(payload: AnswerForCaller) {
+    this.peer
+      .setAnswer(payload.answer)
+      .catch((error) => this.logger.error('Failed to set answer from callee', {
+        error,
+      }));
   }
 }
 

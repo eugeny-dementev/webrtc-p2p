@@ -69,6 +69,9 @@ export class Peer {
     return answer;
   }
 
+  async setAnswer(answer: RTCSessionDescriptionInit): Promise<void> {
+    return this.connection.setRemoteDescription(answer);
+  }
   private addTracks() {
     for (const mediaTrack of this.store.localStream.getTracks()) {
       this.connection.addTrack(mediaTrack);
