@@ -79,18 +79,16 @@ export class Peer {
     if (event.candidate) {
       assert.isInstanceOf(event.candidate, RTCIceCandidate, 'event.candidate must be a RTCIceCandidate');
 
-      if (this.store.targetSocketId) { // Caller side
-        assert.is(this.store.callerSocketId, undefined, 'callerSocketId must not be present if targetSocketId is present');
+      if (this.store.calleeSocketId) { // Caller side
+        assert.is(this.store.callerSocketId, undefined, 'this.store.callerSocketId must not be present if this.store.calleeSocketId is');
 
-        this.callerSignaling
-          .emitIceCandidateToCallee(event.candidate, this.store.targetSocketId);
+        this.callerSignaling.emitIceCandidateToCallee(event.candidate, this.store.calleeSocketId);
       }
 
       if (this.store.callerSocketId) { // Callee side
-        assert.is(this.store.targetSocketId, undefined, 'targetSocketId must not be present if callerSocketId is present');
+        assert.is(this.store.calleeSocketId, undefined, 'this.store.calleeSocketId must not be present if this.store.callerSocketId is');
 
-        this.callerSignaling
-          .emitIceCandidateToCallee(event.candidate, this.store.callerSocketId);
+        this.callerSignaling.emitIceCandidateToCallee(event.candidate, this.store.callerSocketId);
       }
     }
   }

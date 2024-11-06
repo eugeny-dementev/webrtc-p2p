@@ -38,12 +38,12 @@ export class CallerEventsHandler {
 
   emitOfferToCallee() {
     console.log('State:', this.store.get());
-    assert.isString(this.store.targetSocketId, 'store.targetSocketId should be set for sending offer');
+    assert.isString(this.store.calleeSocketId, 'store.calleeSocketId should be set for sending offer');
 
     this.peer
       .createOffer()
       .then((offer) => {
-        this.caller.emitOfferToCallee(offer, this.store.targetSocketId);
+        this.caller.emitOfferToCallee(offer, this.store.calleeSocketId);
       })
       .catch((error) => {
         this.peer.close();
@@ -70,7 +70,7 @@ export class CallerEventsHandler {
       case PreOfferAnswer.CalleeNotFound:
       case PreOfferAnswer.CallRejected: {
         this.ui.showInfoDialog(preOfferAnswer);
-        this.store.targetSocketId = undefined;
+        this.store.calleeSocketId = undefined;
         break;
       }
       case PreOfferAnswer.CallAccepted: {

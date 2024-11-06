@@ -8,7 +8,7 @@ type State = {
   socketId: Socket['id'];
   // id of incoming caller socket id
   callerSocketId: Socket['id'] | undefined; // @FIXME: add cleanup after call is ended
-  targetSocketId: Socket['id'] | undefined // @FIXME: add cleanup after call is ended
+  calleeSocketId: Socket['id'] | undefined // @FIXME: add cleanup after call is ended
   callType: CALL_TYPE | undefined; // @FIXME: add cleanup after call is ended
 
   localStream: MediaStream | null;
@@ -27,7 +27,7 @@ export class Store {
   private state: State = Object.freeze({
     socketId: null,
     callerSocketId: undefined,
-    targetSocketId: undefined,
+    calleeSocketId: undefined,
     callType: undefined,
 
     localStream: null,
@@ -60,11 +60,11 @@ export class Store {
   get callerSocketId() {
     return this.state.callerSocketId;
   }
-  set targetSocketId(value: string | undefined) {
-    this.state = Object.freeze({ ...this.state, targetSocketId: value })
+  set calleeSocketId(value: string | undefined) {
+    this.state = Object.freeze({ ...this.state, calleeSocketId: value })
   }
-  get targetSocketId() {
-    return this.state.targetSocketId;
+  get calleeSocketId() {
+    return this.state.calleeSocketId;
   }
   set callType(value: CALL_TYPE | undefined) {
     this.state = Object.freeze({ ...this.state, callType: value })

@@ -25,14 +25,14 @@ export class CallerSignaling {
     this.socket.emit(SIGNALING_EVENT.ICE_CANDIDATE_FROM_CALLER, payload);
   }
 
-  emitPreOfferToCallee(callType: CALL_TYPE, targetSocketId: Socket['id']) {
+  emitPreOfferToCallee(callType: CALL_TYPE, calleeSocketId: Socket['id']) {
     assert.oneOf(callType, Object.values(CALL_TYPE));
-    assert.isString(targetSocketId, 'targetSocketId should be a non-empty Socket["id"] string');
+    assert.isString(calleeSocketId, 'calleeSocketId should be a non-empty Socket["id"] string');
 
     const payload: PreOfferFromCaller = {
       ...frontToBack,
       callType,
-      calleePersonalCode: targetSocketId,
+      calleePersonalCode: calleeSocketId,
     };
 
     console.log(`Emitting ${SIGNALING_EVENT.PRE_OFFER_FROM_CALLER}`, payload);
@@ -50,10 +50,10 @@ export class CallerSignaling {
     });
   }
 
-  emitOfferToCallee(offer: RTCSessionDescriptionInit, targetSocketId: Socket['id']) {
+  emitOfferToCallee(offer: RTCSessionDescriptionInit, calleeSocketId: Socket['id']) {
     const payload: OfferFromCaller = {
       offer,
-      calleeSocketId: targetSocketId,
+      calleeSocketId,
       ...frontToBack,
     }
 
@@ -65,7 +65,7 @@ export class CallerSignaling {
     this.socket.on(SIGNALING_EVENT.ANSWER_FOR_CALLER, (payload: AnswerForCaller) => {
       assert.is(payload.from, 'back', 'handlePreOffer should always to receive events from the back');
       assert.is(payload.to, 'front', 'handlePreOffer should always to receive events targeted to the front');
-      assert.is(payload.calleeSocketId, this.store.targetSocketId, 'answer should be received from this.store.targetSocketId');
+      assert.is(payload.calleeSocketId, this.store.calleeSocketId, 'answer should be received from this.store.calleeSocketId');
       assert.isFalse(payload.answer === undefined, 'answer should be received');
 
       console.log(`Received ${SIGNALING_EVENT.ANSWER_FOR_CALLER}`, payload);
