@@ -58,6 +58,13 @@ export class CallerEventsHandler {
     this.caller.subscribeToAnswerFromCallee((payload) => {
       this.handleAnswer(payload);
     })
+    this.caller.subscribeToIceCandidatesFromCallee((payload) => {
+      this.peer
+        .addIceCandidate(payload.candidate)
+        .catch((error) => this.logger.error('Failed to add ice candidate to peer connection', {
+          error,
+        }));
+    });
   }
 
   handlePreAnswer(payload: PreAnswerForCaller) {
