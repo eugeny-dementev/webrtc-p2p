@@ -26,6 +26,13 @@ export class CalleeEventsHandler {
     this.callee.subscribeToOfferFromCaller((payload) => {
       this.handleOffer(payload);
     })
+    this.callee.subscribeToIceCandidatesFromCaller((payload) => {
+      this.peer
+        .addIceCandidate(payload.candidate)
+        .catch((error) => this.logger.error('Failed to add ice candidate from caller to peer connection', {
+          error,
+        }));
+    });
   }
 
   handlePreOffer(payload: PreOfferForCallee) {
