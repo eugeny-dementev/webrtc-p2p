@@ -1,7 +1,7 @@
 import { inject, injectable } from "inversify";
 import { assert } from "../common/assert";
 import { CALL_TYPE, PreOfferAnswer } from "../common/constants";
-import { PreAnswerForCaller } from "../common/types";
+import { AnswerForCaller, PreAnswerForCaller } from "../common/types";
 import { Peer } from "./Peer";
 import { CallerSignaling } from "./CallerSignaling";
 import { Store } from "./store";
