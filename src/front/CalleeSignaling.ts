@@ -71,6 +71,7 @@ export class CalleeSignaling {
   }
   emitIceCandidateToCaller(candidate: RTCIceCandidate, targetSocketId: Socket['id']) {
     assert.isString(targetSocketId, 'targetSocketId should be a non-empty Socket["id"] string');
+    assert.is(targetSocketId, this.store.callerSocketId, 'should only emit ice candidates to caller');
 
     const payload: IceCandidateFront = {
       ...frontToBack,
