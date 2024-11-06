@@ -60,6 +60,15 @@ export class Peer {
     return offer;
   }
 
+  async createAnswer(offer: RTCSessionDescriptionInit): Promise<RTCSessionDescriptionInit> {
+    this.connection.setRemoteDescription(offer)
+
+    const answer = await this.connection.createAnswer();
+    this.connection.setLocalDescription(answer);
+
+    return answer;
+  }
+
   private addTracks() {
     for (const mediaTrack of this.store.localStream.getTracks()) {
       this.connection.addTrack(mediaTrack);
@@ -70,9 +79,19 @@ export class Peer {
     if (event.candidate) {
       assert.isInstanceOf(event.candidate, RTCIceCandidate, 'event.candidate must be a RTCIceCandidate');
 
-      this
-        .callerSignaling
-        .emitIceCandidateToCallee(event.candidate, this.store.callerSocketId)
+      if (this.store.targetSocketId) { // Caller side
+        assert.is(this.store.callerSocketId, undefined, 'callerSocketId must not be present if targetSocketId is present');
+
+        this.callerSignaling
+          .emitIceCandidateToCallee(event.candidate, this.store.targetSocketId);
+      }
+
+      if (this.store.callerSocketId) { // Callee side
+        assert.is(this.store.targetSocketId, undefined, 'targetSocketId must not be present if callerSocketId is present');
+
+        this.callerSignaling
+          .emitIceCandidateToCallee(event.candidate, this.store.callerSocketId);
+      }
     }
   }
 
