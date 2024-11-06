@@ -6,6 +6,12 @@ import { assert } from '../common/assert';
 import { PreOfferAnswer, SIGNALING_EVENT } from '../common/constants';
 import { event } from '../common/helpers';
 import {
+  AnswerForCaller,
+  AnswerFromCallee,
+  IceCandidateBack,
+  IceCandidateFront,
+  OfferForCallee,
+  OfferFromCaller,
   PreAnswerForCaller, PreAnswerFromCallee, PreOfferForCallee, PreOfferFromCaller
 } from '../common/types';
 
@@ -79,7 +85,7 @@ io.on('connection', (socket) => {
     io.to(data.callerSocketId).emit(SIGNALING_EVENT.PRE_ANSWER_FOR_CALLER, payloadForCaller);
   });
 
-  socket.on(SIGNALING_EVENT.ICE_CANDIDATE_FROM_CALLER, (data) => {
+  socket.on(SIGNALING_EVENT.ICE_CANDIDATE_FROM_CALLER, (data: IceCandidateFront) => {
     const { targetSocketId, candidate } = data;
 
     console.log(`Received ${SIGNALING_EVENT.ICE_CANDIDATE_FROM_CALLER} from ${socket.id}`, data);
@@ -89,17 +95,20 @@ io.on('connection', (socket) => {
       return;
     }
 
-    const payload = {
-      ...data,
+    const payload: IceCandidateBack = {
+      candidate,
+      targetSocketId: socket.id,
       from: 'back',
       to: 'front',
     }
 
+    console.log(`Emitting ${SIGNALING_EVENT.ICE_CANDIDATE_FOR_CALLEE} to ${data.targetSocketId}`, payload);
+
     io.to(targetSocketId).emit(SIGNALING_EVENT.ICE_CANDIDATE_FOR_CALLEE, payload);
   });
 
-  socket.on(SIGNALING_EVENT.ICE_CANDIDATE_FROM_CALLEE, (data) => {
-    const { targetSocketId } = data;
+  socket.on(SIGNALING_EVENT.ICE_CANDIDATE_FROM_CALLEE, (data: IceCandidateFront) => {
+    const { targetSocketId, candidate } = data;
 
     console.log(`Received ${SIGNALING_EVENT.ICE_CANDIDATE_FROM_CALLEE} from ${socket.id}`, data);
 
@@ -108,54 +117,60 @@ io.on('connection', (socket) => {
       return;
     }
 
-    const payload = {
-      ...data,
-      callerSockerId: socket.id,
+    const payload: IceCandidateBack = {
+      candidate,
+      targetSocketId: socket.id,
       from: 'back',
       to: 'front',
     }
+
+    console.log(`Emitting ${SIGNALING_EVENT.ICE_CANDIDATE_FOR_CALLER} to ${data.targetSocketId}`, payload);
 
     io.to(targetSocketId).emit(SIGNALING_EVENT.ICE_CANDIDATE_FOR_CALLER, payload);
   });
 
-  socket.on(SIGNALING_EVENT.OFFER_FROM_CALLER, (data) => {
-    const { targetSocketId } = data;
+  socket.on(SIGNALING_EVENT.OFFER_FROM_CALLER, (data: OfferFromCaller) => {
+    const { offer, calleeSocketId } = data;
 
     console.log(`Received ${SIGNALING_EVENT.OFFER_FROM_CALLER} from ${socket.id}`, data);
 
-    if (!connectedPeers.has(targetSocketId)) {
-      console.log('Caller not found', targetSocketId);
+    if (!connectedPeers.has(calleeSocketId)) {
+      console.log('Caller not found', calleeSocketId);
       return;
     }
 
-    const payload = {
-      ...data,
-      callerSockerId: socket.id,
+    const payload: OfferForCallee = {
+      offer,
+      callerSocketId: socket.id,
       from: 'back',
       to: 'front',
     }
 
-    io.to(targetSocketId).emit(SIGNALING_EVENT.OFFER_FOR_CALLEE, payload);
+    console.log(`Emitting ${SIGNALING_EVENT.OFFER_FOR_CALLEE} to ${calleeSocketId}`, payload);
+
+    io.to(calleeSocketId).emit(SIGNALING_EVENT.OFFER_FOR_CALLEE, payload);
   });
 
-  socket.on(SIGNALING_EVENT.ANSWER_FROM_CALLEE, (data) => {
-    const { targetSocketId } = data;
+  socket.on(SIGNALING_EVENT.ANSWER_FROM_CALLEE, (data: AnswerFromCallee) => {
+    const { callerSocketId, answer } = data;
 
     console.log(`Received ${SIGNALING_EVENT.ANSWER_FROM_CALLEE} from ${socket.id}`, data);
 
-    if (!connectedPeers.has(targetSocketId)) {
-      console.log('Caller not found', targetSocketId);
+    if (!connectedPeers.has(callerSocketId)) {
+      console.log('Caller not found', callerSocketId);
       return;
     }
 
-    const payload = {
-      ...data,
+    const payload: AnswerForCaller = {
+      answer,
       calleeSocketId: socket.id,
       from: 'back',
       to: 'front',
     }
 
-    io.to(targetSocketId).emit(SIGNALING_EVENT.ANSWER_FOR_CALLER, payload);
+    console.log(`Emitting ${SIGNALING_EVENT.OFFER_FOR_CALLEE} to ${callerSocketId}`, payload);
+
+    io.to(callerSocketId).emit(SIGNALING_EVENT.ANSWER_FOR_CALLER, payload);
   });
 
   socket.on('disconnect', () => {
