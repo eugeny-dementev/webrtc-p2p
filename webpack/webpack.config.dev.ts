@@ -21,8 +21,8 @@ const dev: Configuration & { devServer: DevServerConfiguration } = {
     port: 9001,
     host: 'localhost',
     static: {
-      directory: path.join(__dirname, '../public/utils'),
-      publicPath: '/utils'
+      directory: path.join(__dirname, '../public'),
+      publicPath: '/'
     },
     watchFiles: ["src/**/*"],
   },
