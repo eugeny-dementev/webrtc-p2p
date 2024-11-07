@@ -151,11 +151,12 @@ export class UI {
   }
 
   private showVideoCallElements() {
+    assert.isInstanceOf(this.store.remoteStream, MediaStream, 'this.store.remoteStream must exists for video call');
+
     this.show('call_buttons');
     this.hide('videos_placeholder');
 
     this.show('remote_video');
-    assert.isInstanceOf(this.store.remoteStream, MediaStream, 'this.store.remoteStream should exists when call established');
     this.setRemoteVideo(this.store.remoteStream);
 
     this.show('new_message')
