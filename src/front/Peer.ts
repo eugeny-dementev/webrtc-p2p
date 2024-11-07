@@ -1,7 +1,6 @@
 import { inject, injectable } from "inversify";
 import { assert } from "../common/assert";
 import { CALL_TYPE } from "../common/constants";
-import { ILogger } from "../common/Logger";
 import { CalleeSignaling } from "./CalleeSignaling";
 import { CallerSignaling } from "./CallerSignaling";
 import { Store } from "./store";
