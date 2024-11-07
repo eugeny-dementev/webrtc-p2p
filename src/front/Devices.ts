@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
 
-const defaultContrains: MediaStreamConstraints = {
+const defaultConstrains: MediaStreamConstraints = {
   audio: true,
   video: true,
 }
@@ -10,6 +10,6 @@ export class Devices {
   async getLocalStream(): Promise<MediaStream> {
     return navigator
       .mediaDevices
-      .getUserMedia(defaultContrains);
+      .getUserMedia(defaultConstrains);
   }
 }
