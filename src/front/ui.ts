@@ -44,6 +44,16 @@ export class UI {
     localVideo.srcObject = mediaStream;
   }
 
+  setRemoteVideo(mediaStream: MediaStream) {
+    const remoteVideo = document.getElementById('remote_video') as HTMLVideoElement;
+
+
+    remoteVideo.addEventListener('loadedmetadata', () => {
+      remoteVideo.play();
+    })
+
+    remoteVideo.srcObject = mediaStream;
+  }
 
   showCallingDialog(cancel: HTMLElement['onclick']) {
     assert.isFunction(cancel, 'cancelCallHandler should be a function');
@@ -143,7 +153,11 @@ export class UI {
   private showVideoCallElements() {
     this.show('call_buttons');
     this.hide('videos_placeholder');
+
     this.show('remote_video');
+    assert.isInstanceOf(this.store.remoteStream, MediaStream, 'this.store.remoteStream should exists when call established');
+    this.setRemoteVideo(this.store.remoteStream);
+
     this.show('new_message')
 
     // block panel until call is ended

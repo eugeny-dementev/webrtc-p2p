@@ -81,9 +81,9 @@ export class CallerEventsHandler {
         break;
       }
       case PreOfferAnswer.CallAccepted: {
+        this.peer.init();
         this.ui.showCallElements(this.store.callType);
         this.ui.removeDialog();
-        this.peer.init();
         this.emitOfferToCallee();
         break;
       };

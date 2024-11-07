@@ -47,9 +47,10 @@ export class CalleeEventsHandler {
       this.ui.showIncomingCallingDialog(
         callType,
         () => {
+          this.store.callType = callType;
           this.callee.emitPreAnswerToCaller(PreOfferAnswer.CallAccepted);
-          this.ui.showCallElements(payload.callType);
           this.peer.init();
+          this.ui.showCallElements(payload.callType);
         },
         () => {
           this.callee.emitPreAnswerToCaller(PreOfferAnswer.CallRejected);

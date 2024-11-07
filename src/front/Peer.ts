@@ -23,7 +23,6 @@ export class Peer {
     @inject(TOKEN.CallerSignaling) private readonly callerSignaling: CallerSignaling,
     @inject(TOKEN.CalleeSignaling) private readonly calleeSignaling: CalleeSignaling,
     @inject(TOKEN.Store) private readonly store: Store,
-    @inject(TOKEN.Logger) private readonly logger: ILogger,
   ) {
     this.ontrack = this.ontrack.bind(this);
     this.onicecandidate = this.onicecandidate.bind(this);
@@ -31,6 +30,8 @@ export class Peer {
   }
 
   init() {
+    assert.oneOf(this.store.callType, Object.values(CALL_TYPE));
+
     this.connection = new RTCPeerConnection(defaultConfiguration);
 
     // prepare remote media stream to receive remote media tracks
