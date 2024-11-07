@@ -81,6 +81,7 @@ export class Peer {
 
   private addTracks() {
     for (const mediaTrack of this.store.localStream.getTracks()) {
+      console.log('Adding localStream tracks to connection', mediaTrack);
       this.connection.addTrack(mediaTrack);
     }
   }
@@ -105,15 +106,17 @@ export class Peer {
 
   private onconnectionstatechange() {
     if (this.connection.connectionState === 'connected') {
-      this.logger.info('Successfully connected to callee peer', this.connection);
+      console.log('Successfully connected to callee peer', this.connection);
     } else {
-      this.logger.debug('Connection state changed', this.connection)
+      console.log('Connection state changed', this.connection.connectionState)
     }
   }
 
   private ontrack(event: MediaStreamTrackEvent) {
     assert.isInstanceOf(this.store.remoteStream, MediaStream, 'Media stream must exist to add media tracks to it');
     assert.isInstanceOf(event.track, MediaStreamTrack, 'event.track must be a MediaStreamTrack');
+
+    console.log('Received MediaStreamTrack', event.track);
 
     this.store.remoteStream.addTrack(event.track);
   }
