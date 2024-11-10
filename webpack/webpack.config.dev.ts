@@ -7,6 +7,7 @@ import path from "path";
 
 const dev: Configuration & { devServer: DevServerConfiguration } = {
   ...config,
+  mode: 'development',
   devtool: "inline-source-map",
   devServer: {
     proxy: {
