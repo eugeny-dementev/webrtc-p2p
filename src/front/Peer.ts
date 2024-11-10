@@ -45,6 +45,27 @@ export class Peer {
     }
   }
 
+  async initScreenSharing() {
+    try {
+      this.store.screenSharingStream = await navigator.mediaDevices.getDisplayMedia({
+        video: true,
+      });
+
+      const senders = this.connection.getSenders();
+
+      const videoTrack = this.store.localStream.getVideoTracks()[0]
+      const videoSender = senders.find((sender) => sender.track.kind === videoTrack.kind);
+
+      if (videoSender) {
+        videoSender.replaceTrack(this.store.screenSharingStream.getVideoTracks()[0]);
+        this.store.screenSharingActive = true;
+      }
+    } catch (e) {
+      console.error('Failed to activate screen sharing');
+      console.error(e);
+    }
+  }
+
   close() {
     this.connection.onicecandidate = undefined;
     this.connection.onconnectionstatechange = undefined;

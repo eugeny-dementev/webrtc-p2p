@@ -5,6 +5,7 @@ import { CALL_TYPE } from '../common/constants';
 import { CalleeEventsHandler } from './CalleeEventsHandler';
 import { CallerEventsHandler } from './CallerEventsHandler';
 import { Devices } from './Devices';
+import { Peer } from './Peer';
 import { Store } from './store';
 import { TOKEN } from './tokens';
 import { UI } from './ui';
@@ -13,6 +14,7 @@ import { UI } from './ui';
 export class WebRTCApp {
   constructor(
     @inject(TOKEN.Store) private readonly store: Store,
+    @inject(TOKEN.Peer) private readonly peer: Peer,
     @inject(TOKEN.Devices) private readonly devices: Devices,
     @inject(TOKEN.Socket) private readonly socket: Socket,
     @inject(TOKEN.CalleeEventsHandler) private readonly calleeHandler: CalleeEventsHandler,
@@ -73,6 +75,17 @@ export class WebRTCApp {
       videoTrack.enabled = !cameraEnabled
 
       this.ui.updateCameraButton(!cameraEnabled);
+    });
+
+    this.ui.registerButtonHandler('screen_sharing_button', () => {
+      const screenSharingActive = this.store.screenSharingActive;
+
+      this.peer
+        .initScreenSharing()
+        .then(() => {
+          this.ui.setLocalStream(this.store.screenSharingStream);
+        })
+        .catch(console.error)
     });
 
     const mediaStream = await this.devices.getLocalStream();
