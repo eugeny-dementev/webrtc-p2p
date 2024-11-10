@@ -55,6 +55,16 @@ export class WebRTCApp {
       this.callerHandler.emitPreOffer(code, CALL_TYPE.PersonalCall);
     });
 
+    this.ui.registerButtonHandler('mic_button', () => {
+      const localStream = this.store.localStream;
+      const audioTrack = localStream.getAudioTracks()[0]
+      const micEnabled = audioTrack.enabled;
+
+      audioTrack.enabled = !micEnabled
+
+      this.ui.updateMicButton(!micEnabled);
+    });
+
     const mediaStream = await this.devices.getLocalStream();
 
     this.store.localStream = mediaStream;

@@ -83,6 +83,17 @@ export class UI {
     this.showDialog(incomingCallDialog);
   }
 
+  updateMicButton(micEnabled: boolean) {
+    const micOnImgSrc = './utils/images/mic.png';
+    const micOffImgSrc = './utils/images/micOff.png';
+
+    const micButtonImage = this.get('mic_button_image') as HTMLImageElement;
+
+    micButtonImage.src = micEnabled
+      ? micOnImgSrc
+      : micOffImgSrc;
+  }
+
   showInfoDialog(preOfferAnswer: PreOfferAnswer) {
     assert.oneOf(preOfferAnswer, Object.values(PreOfferAnswer));
 
@@ -192,6 +203,10 @@ export class UI {
     if (element.classList.contains('display_none')) {
       element.classList.remove('display_none');
     }
+  }
+
+  private get(id: HTMLElement['id']): HTMLElement | undefined {
+    return document.getElementById(id);
   }
 
   private enableDashboard() {
