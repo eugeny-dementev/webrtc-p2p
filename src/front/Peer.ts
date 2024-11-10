@@ -72,7 +72,7 @@ export class Peer {
     assert.is(this.store.screenSharingActive, true, 'should only stop if screenSharingActive === true');
     try {
       const senders = this.connection.getSenders();
-      const videoTrack = this.store.screenSharingStream.getVideoTracks()[0]
+      const videoTrack = this.store.localStream.getVideoTracks()[0]
 
       const videoSender = senders.find((sender) => sender.track.kind === videoTrack.kind);
 
@@ -81,6 +81,7 @@ export class Peer {
       }
 
       this.store.screenSharingActive = false;
+      this.store.screenSharingStream.getTracks().forEach((track) => track.stop());
       this.store.screenSharingStream = undefined;
     } catch (e) {
       console.error('Failed to activate screen sharing');
