@@ -80,12 +80,21 @@ export class WebRTCApp {
     this.ui.registerButtonHandler('screen_sharing_button', () => {
       const screenSharingActive = this.store.screenSharingActive;
 
-      this.peer
-        .initScreenSharing()
-        .then(() => {
-          this.ui.setLocalStream(this.store.screenSharingStream);
-        })
-        .catch(console.error)
+      if (screenSharingActive) {
+        this.peer
+          .stopScreenSharing()
+          .then(() => {
+            this.ui.setLocalStream(this.store.localStream);
+          })
+          .catch(console.error)
+      } else {
+        this.peer
+          .initScreenSharing()
+          .then(() => {
+            this.ui.setLocalStream(this.store.screenSharingStream);
+          })
+          .catch(console.error)
+      }
     });
 
     const mediaStream = await this.devices.getLocalStream();
