@@ -65,6 +65,16 @@ export class WebRTCApp {
       this.ui.updateMicButton(!micEnabled);
     });
 
+    this.ui.registerButtonHandler('camera_button', () => {
+      const localStream = this.store.localStream;
+      const videoTrack = localStream.getVideoTracks()[0]
+      const cameraEnabled = videoTrack.enabled;
+
+      videoTrack.enabled = !cameraEnabled
+
+      this.ui.updateCameraButton(!cameraEnabled);
+    });
+
     const mediaStream = await this.devices.getLocalStream();
 
     this.store.localStream = mediaStream;

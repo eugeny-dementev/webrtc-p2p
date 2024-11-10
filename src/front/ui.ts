@@ -94,6 +94,17 @@ export class UI {
       : micOffImgSrc;
   }
 
+  updateCameraButton(cameraEnabled: boolean) {
+    const cameraOnImgSrc = './utils/images/camera.png';
+    const cameraOffImgSrc = './utils/images/cameraOff.png';
+
+    const cameraButtonImage = this.get('camera_button_image') as HTMLImageElement;
+
+    cameraButtonImage.src = cameraEnabled
+      ? cameraOnImgSrc
+      : cameraOffImgSrc;
+  }
+
   showInfoDialog(preOfferAnswer: PreOfferAnswer) {
     assert.oneOf(preOfferAnswer, Object.values(PreOfferAnswer));
 
